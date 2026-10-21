@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}500 Server Error | {{ SITE_CONFIG.brand_name }}{% endblock %}
+{% block content %}
+<section class="section-padding text-center">
+    <div class="container" style="max-width: 600px;">
+        <div style="font-size: 4rem; color: var(--saffron-primary);">🙏</div>
+        <h1 class="heading-sacred" style="color: var(--saffron-primary); margin-bottom: 1rem;">500 - तकनीकी त्रुटि (Internal Server Error)</h1>
+        <p style="margin-bottom: 2rem; color: var(--text-muted);">सर्वर में तकनीकी व्यवधान उत्पन्न हुआ है। कृपया कुछ समय पश्चात पुनः प्रयास करें।</p>
+        <a href="{{ url_for('main.index') }}" class="btn btn-saffron">मुख्य पृष्ठ पर जाएं (Back to Home)</a>
+    </div>
+</section>
+{% endblock %}

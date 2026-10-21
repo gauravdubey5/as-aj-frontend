@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Astro Ashish Ji Admin</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #F4F6F8; color: #111827; }
+        .admin-header { background: #1F2937; color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .admin-brand { font-size: 1.2rem; font-weight: 700; color: #F59E0B; }
+        .admin-nav { display: flex; gap: 1.2rem; }
+        .admin-nav a { color: #D1D5DB; text-decoration: none; font-size: 0.95rem; font-weight: 500; }
+        .admin-nav a:hover, .admin-nav a.active { color: #FFF; font-weight: 700; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: #fff; padding: 1.2rem; border-radius: 8px; border: 1px solid #E5E7EB; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .stat-val { font-size: 1.8rem; font-weight: 800; color: #B45309; }
+        .stat-title { font-size: 0.82rem; color: #6B7280; font-weight: 600; text-transform: uppercase; margin-top: 0.2rem; }
+        .card { background: #fff; border-radius: 8px; border: 1px solid #E5E7EB; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; text-align: left; margin-top: 1rem; }
+        th, td { padding: 0.8rem; border-bottom: 1px solid #E5E7EB; font-size: 0.9rem; }
+        th { background: #F9FAFB; color: #374151; font-weight: 600; }
+        .badge { padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; display: inline-block; }
+        .badge-success { background: #D1FAE5; color: #065F46; }
+        .badge-warning { background: #FEF3C7; color: #B45309; }
+        .badge-pending { background: #FEF3C7; color: #B45309; }
+        .badge-confirmed { background: #D1FAE5; color: #065F46; }
+        .badge-completed { background: #E0E7FF; color: #3730A3; }
+        .btn { background: #F59E0B; color: #fff; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn-green { background: #10B981; }
+        .btn-blue { background: #2563EB; }
+        .btn-gray { background: #6B7280; }
+        .alert { padding: 0.8rem; border-radius: 6px; margin-bottom: 1rem; background: #D1FAE5; color: #065F46; }
+    </style>
+</head>
+<body>
+
+    <header class="admin-header">
+        <div class="admin-brand">Astro Ashish Ji • Admin Portal</div>
+        <nav class="admin-nav">
+            <a href="{{ url_for('admin.dashboard') }}" class="active">Dashboard</a>
+            <a href="{{ url_for('admin.panchang_manage') }}">Panchang</a>
+            <a href="{{ url_for('admin.rashifal_manage') }}">Rashifal</a>
+            <a href="{{ url_for('admin.bookings') }}">Bookings</a>
+            <a href="{{ url_for('admin.services') }}">Services</a>
+            <a href="{{ url_for('admin.pooja') }}">Pooja</a>
+            <a href="{{ url_for('admin.testimonials') }}">Testimonials</a>
+            <a href="{{ url_for('admin.contacts') }}">Enquiries</a>
+            <a href="{{ url_for('admin.logout') }}" style="color: #F87171;">Logout</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <h2 style="margin-bottom: 1.5rem;">System Overview (Asia/Kolkata: {{ stats.today_str }})</h2>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-val">{{ stats.total_consultations }}</div>
+                <div class="stat-title">Total Bookings</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val" style="color: #D97706;">{{ stats.pending_bookings }}</div>
+                <div class="stat-title">Pending Bookings</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val" style="color: #059669;">{{ stats.completed_consultations }}</div>
+                <div class="stat-title">Completed Consultations</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val" style="color: #4F46E5;">{{ stats.total_enquiries }}</div>
+                <div class="stat-title">Contact Enquiries</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val" style="color: #2563EB;">{{ stats.active_services }}</div>
+                <div class="stat-title">Active Services</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val" style="color: #7C3AED;">{{ stats.active_poojas }}</div>
+                <div class="stat-title">Active Poojas</div>
+            </div>
+        </div>
+
+        <!-- DAILY RASHIFAL AUTOMATION SECTION -->
+        <div class="card" style="border-left: 6px solid #F59E0B;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <h3 style="margin-bottom: 0.3rem;">Daily Rashifal Automation</h3>
+                    <p style="color: #6B7280; font-size: 0.9rem;">Automatic daily 12 Rashi generation & publishing system (Timezone: Asia/Kolkata)</p>
+                </div>
+                <div>
+                    {% if stats.automation_status.is_today_published %}
+                        <span class="badge badge-success">✓ Today's Rashifal Published</span>
+                    {% else %}
+                        <span class="badge badge-warning">⚠ Today's Rashifal Not Generated</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; background: #F9FAFB; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem;">
+                <div><strong>Date:</strong> {{ stats.automation_status.today_date }}</div>
+                <div><strong>Rashis Generated:</strong> {{ stats.automation_status.generated_count }}/12</div>
+                <div><strong>Provider:</strong> {{ stats.automation_status.provider_name }}</div>
+                <div><strong>Last Update:</strong> {{ stats.automation_status.last_update_time }}</div>
+            </div>
+
+            <!-- Automation Control Buttons -->
+            <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+                <form method="POST" action="{{ url_for('admin.rashifal_manage') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="action" value="generate_today">
+                    <button type="submit" class="btn btn-green">⚡ Generate Today's Rashifal</button>
+                </form>
+
+                <form method="POST" action="{{ url_for('admin.rashifal_manage') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="action" value="regenerate_today">
+                    <button type="submit" class="btn btn-blue">🔄 Regenerate Today's Rashifal</button>
+                </form>
+
+                <a href="{{ url_for('main.rashifal_index') }}" target="_blank" class="btn btn-gray">👁️ View Today's Rashifal</a>
+                <a href="{{ url_for('admin.rashifal_manage') }}" class="btn" style="background: #4B5563;">📜 View History</a>
+            </div>
+        </div>
+
+        <!-- Recent Bookings Table -->
+        <div class="card">
+            <h3>Recent Consultation Bookings</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ref Code</th>
+                        <th>Name</th>
+                        <th>Consultation Type</th>
+                        <th>WhatsApp</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in recent_bookings %}
+                    <tr>
+                        <td><strong>{{ b.booking_reference }}</strong></td>
+                        <td>{{ b.full_name }}</td>
+                        <td>{{ b.consultation_type }}</td>
+                        <td>{{ b.whatsapp_number }}</td>
+                        <td><span class="badge badge-{{ b.status }}">{{ b.status }}</span></td>
+                        <td>
+                            <a href="{{ url_for('admin.booking_detail', booking_id=b.id) }}" style="color: #2563EB; font-weight: 600;">View Details</a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: #6B7280;">No bookings received yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

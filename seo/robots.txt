@@ -1,0 +1,7 @@
+# Astro Ashish Ji - Vedic Astrology & Vastu Shastra
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://astroashish.guru/sitemap.xml

@@ -1,0 +1,202 @@
+/* ==========================================================================
+   Responsive Stylesheet - Pandit Ashish Ji Maharaj Website
+   Breakpoints: 360px, 480px, 768px, 1024px, 1280px, 1440px+
+   ========================================================================== */
+
+/* --- Desktop Large (1440px+) --- */
+@media (min-width: 1440px) {
+    .container {
+        max-width: 1360px;
+    }
+    
+    .hero-title {
+        font-size: 3.5rem;
+    }
+}
+
+/* --- Laptop & Desktop (1024px to 1279px) --- */
+@media (max-width: 1024px) {
+    .main-nav {
+        display: none;
+    }
+
+    .nav-hamburger {
+        display: flex;
+    }
+
+    .desktop-consult-btn {
+        display: none;
+    }
+
+    .hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 2.5rem;
+    }
+
+    .hero-cta-group {
+        justify-content: center;
+    }
+
+    .hero-trust-bullets {
+        justify-content: center;
+    }
+
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    .modes-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- Tablets (768px to 1023px) --- */
+@media (max-width: 768px) {
+    .top-sacred-content {
+        flex-direction: column;
+        gap: 0.3rem;
+        text-align: center;
+    }
+
+    .top-banner-actions {
+        display: none;
+    }
+
+    .trust-strip-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .trust-card {
+        border-right: none;
+        border-bottom: 1px dashed var(--border-color);
+        padding-bottom: 1rem;
+    }
+
+    .trust-card:nth-child(3),
+    .trust-card:nth-child(4) {
+        border-bottom: none;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full-width {
+        grid-column: span 1;
+    }
+
+    .payment-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .desktop-fab-whatsapp {
+        display: none;
+    }
+
+    .mobile-sticky-action-bar {
+        display: block;
+    }
+
+    body {
+        padding-bottom: 4.2rem;
+    }
+}
+
+/* --- Mobile Landscape & Small Tablets (480px to 767px) --- */
+@media (max-width: 480px) {
+    .section-padding {
+        padding: 3rem 0;
+    }
+
+    .hero-portrait-frame {
+        width: 260px;
+        height: 330px;
+    }
+
+    .trust-strip-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .counter-value {
+        font-size: 2rem;
+    }
+
+    .services-grid,
+    .testimonials-grid,
+    .panchang-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .service-actions {
+        flex-direction: column;
+    }
+
+    .booking-container {
+        padding: 1.5rem 1rem;
+    }
+
+    .modal-card {
+        padding: 1.5rem 1rem;
+    }
+
+    .modal-cta-group {
+        flex-direction: column;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+/* --- Ultra Small Mobile Screens (360px and below) --- */
+@media (max-width: 360px) {
+    .site-logo {
+        gap: 0.5rem;
+    }
+
+    .logo-emblem {
+        width: 40px;
+        height: 40px;
+        font-size: 1.3rem;
+    }
+
+    .logo-title-hi {
+        font-size: 1rem;
+    }
+
+    .logo-title-en {
+        font-size: 0.75rem;
+    }
+
+    .hero-cta-group {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .hero-cta-group .btn {
+        width: 100%;
+    }
+}
+
+/* Hide Mobile Bottom Bar on Desktop Screens */
+@media (min-width: 769px) {
+    .mobile-bottom-fixed-nav {
+        display: none !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-bottom-fixed-nav {
+        display: flex !important;
+    }
+}
+

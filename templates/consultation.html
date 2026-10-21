@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}कुंडली परामर्श बुक करें | {{ SITE_CONFIG.brand_name }}{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container" style="max-width: 800px;">
+        <div class="section-header text-center">
+            <div class="section-tag">गोपनीय व व्यक्तिगत</div>
+            <h2 class="section-title heading-sacred">कुंडली परामर्श अपॉइंटमेंट फॉर्म</h2>
+            <p class="section-subtitle">एस्ट्रो आशीष जी से 1-on-1 व्यक्तिगत मार्गदर्शन हेतु अपनी जन्म जानकारी दर्ज करें</p>
+        </div>
+
+        <!-- Privacy Assurance Banner -->
+        <div style="background: var(--bg-card-alt); border: 1px solid var(--border-gold); padding: 1rem 1.5rem; border-radius: var(--border-radius-md); margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem;">
+            <span style="font-size: 1.8rem; color: var(--saffron-primary);">🔒</span>
+            <div style="font-size: 0.9rem; color: var(--text-main);">
+                <strong>100% गोपनीय एवं सुरक्षित:</strong> आपकी जन्म तिथि, समय व स्थान केवल परामर्श हेतु प्रयुक्त होंगे। हम आपका व्यक्तिगत विवरण किसी के साथ साझा नहीं करते।
+            </div>
+        </div>
+
+        <!-- Consultation Form Card -->
+        <div style="background: var(--bg-card); padding: 2.5rem; border-radius: var(--border-radius-lg); border: 1px solid var(--border-gold); box-shadow: var(--shadow-soft);">
+            <form id="consultation-form" action="{{ url_for('booking.submit_booking') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <!-- 1. Select Consultation Type -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: var(--saffron-primary); font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border-gold); padding-bottom: 0.5rem;" class="heading-sacred">
+                        1. परामर्श का प्रकार चुनें (Consultation Type)
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+                        <label style="display: flex; align-items: center; gap: 0.8rem; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; background: var(--bg-card-alt);">
+                            <input type="radio" name="consultation_type" value="Janam Kundli Deep Analysis" checked>
+                            <div>
+                                <strong>जन्म कुंडली सूक्ष्म विश्लेषण</strong>
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">45 मिनट वीडियो/ऑडियो कॉल</div>
+                            </div>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.8rem; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; background: var(--bg-card-alt);">
+                            <input type="radio" name="consultation_type" value="Kundli Milan & Marriage">
+                            <div>
+                                <strong>कुंडली मिलान व विवाह विचार</strong>
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">30 मिनट वीडियो/ऑडियो कॉल</div>
+                            </div>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.8rem; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; background: var(--bg-card-alt);">
+                            <input type="radio" name="consultation_type" value="Vastu Shastra Consultation">
+                            <div>
+                                <strong>वास्तु शास्त्र परामर्श</strong>
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">60 मिनट विस्तृत सत्र</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 2. Personal & Birth Details -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: var(--saffron-primary); font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border-gold); padding-bottom: 0.5rem;" class="heading-sacred">
+                        2. जन्म विवरण (Birth Details)
+                    </h3>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 1rem;">
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.4rem;">पूरा नाम (Full Name) *</label>
+                            <input type="text" id="fullName" name="full_name" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);">
+                        </div>
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.4rem;">लिंग (Gender)</label>
+                            <select name="gender" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);">
+                                <option value="Male">पुरुष (Male)</option>
+                                <option value="Female">महिला (Female)</option>
+                                <option value="Other">अन्य (Other)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 1rem;">
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.4rem;">जन्म तिथि (Date of Birth) *</label>
+                            <input type="date" id="dob" name="date_of_birth" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);">
+                        </div>
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.4rem;">जन्म समय (Time of Birth)</label>
+                            <input type="time" id="tob" name="birth_time" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);">
+                            <label style="font-size: 0.85rem; margin-top: 0.4rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                                <input type="checkbox" id="tob-unknown" name="approximate_birth_time"> जन्म समय सटीक ज्ञात नहीं है (Time Unknown)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;">
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.4rem;">जन्म स्थान (Place of Birth - City/District) *</label>
+                            <input type="text" id="pob" name="birth_place" required placeholder="e.g. Lucknow, UP" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);">
+                        </div>
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.4rem;">देश (Country)</label>
+                            <input type="text" name="country" value="India" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Primary Concern & Contact Details -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: var(--saffron-primary); font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border-gold); padding-bottom: 0.5rem;" class="heading-sacred">
+                        3. विषय एवं संपर्क विवरण (Primary Concern & Contact)
+                    </h3>
+
+                    <div style="margin-bottom: 1.2rem;" id="concern-group-container">
+                        <label style="display: block; font-weight: 600; margin-bottom: 0.6rem;">मुख्य विषय चुनें (Primary Concern):</label>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.6rem;">
+                            <label><input type="checkbox" name="concern" value="Career & Business"> करियर व व्यापार (Career)</label>
+                            <label><input type="checkbox" name="concern" value="Marriage & Relationship"> विवाह व प्रेम (Marriage)</label>
+                            <label><input type="checkbox" name="concern" value="Health & Family"> स्वास्थ्य व परिवार (Health)</label>
+                            <label><input type="checkbox" name="concern" value="Finance & Wealth"> धन व संपत्ति (Finances)</label>
+                            <label><input type="checkbox" name="concern" value="Foreign Travel"> विदेश योग (Foreign)</label>
+                            <label><input type="checkbox" name="concern" value="Graha Shanti Remedies"> ग्रह शांति उपाय (Remedies)</label>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;">
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.4rem;">व्हाट्सएप नंबर (WhatsApp Number) *</label>
+                            <input type="tel" id="phone" name="whatsapp_number" required placeholder="+91 884 042 5538" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);">
+                        </div>
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.4rem;">ईमेल आईडी (Email Address)</label>
+                            <input type="email" id="email" name="email" placeholder="example@domain.com" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-saffron" style="width: 100%; font-size: 1.1rem; padding: 1rem;">
+                    🪔 परामर्श अनुरोध जमा करें (Submit Request)
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

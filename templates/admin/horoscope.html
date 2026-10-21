@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Rashifal Editor | Admin</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #F4F6F8; color: #111827; }
+        .admin-header { background: #1F2937; color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .admin-brand { font-size: 1.2rem; font-weight: 700; color: #F59E0B; }
+        .admin-nav { display: flex; gap: 1.5rem; }
+        .admin-nav a { color: #D1D5DB; text-decoration: none; font-size: 0.95rem; font-weight: 500; }
+        .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+        .card { background: #fff; padding: 1.5rem; border-radius: 8px; border: 1px solid #E5E7EB; margin-bottom: 1.5rem; }
+        input, select, textarea { width: 100%; padding: 0.7rem; border-radius: 6px; border: 1px solid #D1D5DB; margin-bottom: 0.8rem; }
+        .btn { padding: 0.7rem 1.2rem; background: #B45309; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .alert { padding: 0.8rem; background: #D1FAE5; color: #065F46; border-radius: 6px; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="admin-brand">Astro Ashish Ji • Daily Rashifal Editor</div>
+        <nav class="admin-nav">
+            <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('admin.bookings') }}">Bookings</a>
+            <a href="{{ url_for('admin.services') }}">Services</a>
+            <a href="{{ url_for('admin.pooja') }}">Pooja</a>
+            <a href="{{ url_for('admin.testimonials') }}">Testimonials</a>
+            <a href="{{ url_for('admin.contacts') }}">Enquiries</a>
+            <a href="{{ url_for('admin.horoscope') }}" style="color:#FFF; font-weight:700;">Horoscope</a>
+            <a href="{{ url_for('admin.logout') }}" style="color: #F87171;">Logout</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <h2 style="margin-bottom: 1rem;">Daily 12 Rashi Rashifal Editor (Date: {{ date_str }})</h2>
+
+        <div class="card">
+            <h3>Publish / Update Horoscope Content</h3>
+            <form action="{{ url_for('admin.horoscope') }}" method="POST" style="margin-top: 1rem;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label style="font-weight:600; display:block; margin-bottom:0.3rem;">Select Zodiac Sign (राशि)</label>
+                        <select name="zodiac" required>
+                            <option value="aries">Aries (मेष)</option>
+                            <option value="taurus">Taurus (वृषभ)</option>
+                            <option value="gemini">Gemini (मिथुन)</option>
+                            <option value="cancer">Cancer (कर्क)</option>
+                            <option value="leo">Leo (सिंह)</option>
+                            <option value="virgo">Virgo (कन्या)</option>
+                            <option value="libra">Libra (तुला)</option>
+                            <option value="scorpio">Scorpio (वृश्चिक)</option>
+                            <option value="sagittarius">Sagittarius (धनु)</option>
+                            <option value="capricorn">Capricorn (मकर)</option>
+                            <option value="aquarius">Aquarius (कुंभ)</option>
+                            <option value="pisces">Pisces (मीन)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-weight:600; display:block; margin-bottom:0.3rem;">Date (YYYY-MM-DD)</label>
+                        <input type="date" name="date" value="{{ date_str }}" required>
+                    </div>
+                </div>
+
+                <label style="font-weight:600; display:block; margin-bottom:0.3rem;">Rashifal Content (Hindi)</label>
+                <textarea name="content_hi" rows="3" placeholder="आज का राशिफल हिंदी में लिखें..." required></textarea>
+
+                <label style="font-weight:600; display:block; margin-bottom:0.3rem;">Rashifal Content (English)</label>
+                <textarea name="content_en" rows="3" placeholder="Write horoscope in English..." required></textarea>
+
+                <button type="submit" class="btn">Save & Publish Horoscope</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

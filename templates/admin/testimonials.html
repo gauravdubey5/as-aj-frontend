@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Testimonial Management | Admin</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #F4F6F8; color: #111827; }
+        .admin-header { background: #1F2937; color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .admin-brand { font-size: 1.2rem; font-weight: 700; color: #F59E0B; }
+        .admin-nav { display: flex; gap: 1.5rem; }
+        .admin-nav a { color: #D1D5DB; text-decoration: none; font-size: 0.95rem; font-weight: 500; }
+        .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+        .card { background: #fff; padding: 1.5rem; border-radius: 8px; border: 1px solid #E5E7EB; margin-bottom: 1.5rem; }
+        input, textarea, select { width: 100%; padding: 0.7rem; border-radius: 6px; border: 1px solid #D1D5DB; margin-bottom: 0.8rem; }
+        .btn { padding: 0.7rem 1.2rem; background: #B45309; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 0.8rem; border-bottom: 1px solid #E5E7EB; text-align: left; }
+        .alert { padding: 0.8rem; background: #D1FAE5; color: #065F46; border-radius: 6px; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="admin-brand">Astro Ashish Ji • Testimonials</div>
+        <nav class="admin-nav">
+            <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('admin.bookings') }}">Bookings</a>
+            <a href="{{ url_for('admin.services') }}">Services</a>
+            <a href="{{ url_for('admin.pooja') }}">Pooja</a>
+            <a href="{{ url_for('admin.testimonials') }}" style="color:#FFF; font-weight:700;">Testimonials</a>
+            <a href="{{ url_for('admin.contacts') }}">Enquiries</a>
+            <a href="{{ url_for('admin.horoscope') }}">Horoscope</a>
+            <a href="{{ url_for('admin.logout') }}" style="color: #F87171;">Logout</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <h2 style="margin-bottom: 1rem;">Customer Testimonials</h2>
+
+        <div class="card">
+            <h3>Add Verified Testimonial</h3>
+            <form action="{{ url_for('admin.testimonials') }}" method="POST" style="margin-top: 1rem;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="action" value="add">
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                    <input type="text" name="name" placeholder="Client Name" required>
+                    <input type="text" name="location" placeholder="City / State (e.g. Delhi)">
+                    <input type="text" name="country" placeholder="Country" value="India">
+                </div>
+                <textarea name="content" placeholder="Testimonial Content / Review" rows="3" required></textarea>
+                <div style="margin-bottom: 1rem;">
+                    <label><input type="checkbox" name="verified" checked> Verified Customer</label>
+                </div>
+                <button type="submit" class="btn">Add Testimonial</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>Testimonials List</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Content</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in testimonials %}
+                    <tr>
+                        <td>{{ t.id }}</td>
+                        <td><strong>{{ t.name }}</strong></td>
+                        <td>{{ t.location }}, {{ t.country }}</td>
+                        <td style="max-width: 300px;">{{ t.content }}</td>
+                        <td>
+                            {% if t.is_sample %}
+                            <span style="background: #FEF3C7; color: #B45309; padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 0.75rem;">SAMPLE</span>
+                            {% else %}
+                            <span style="background: #D1FAE5; color: #065F46; padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 0.75rem;">VERIFIED</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ "Published" if t.is_published else "Hidden" }}</td>
+                        <td>
+                            <form action="{{ url_for('admin.testimonials') }}" method="POST" style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="action" value="toggle_publish">
+                                <input type="hidden" name="testimonial_id" value="{{ t.id }}">
+                                <button type="submit" style="background: none; border: none; color: #B45309; font-weight: 600; cursor: pointer;">
+                                    {% if t.is_published %}Unpublish{% else %}Publish{% endif %}
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

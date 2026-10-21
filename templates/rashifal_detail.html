@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}{{ zodiac_info.hi }} राशिफल ({{ zodiac_info.en }}) - {{ current_date }} | {{ SITE_CONFIG.brand_name }}{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container" style="max-width: 900px;">
+        <div style="margin-bottom: 2rem;">
+            <a href="{{ url_for('main.panchang_page', date=current_date) }}" style="color: var(--saffron-primary); text-decoration: none; font-weight: 500;">
+                ← सभी 12 राशियों का पंचांग व राशिफल
+            </a>
+        </div>
+
+        <!-- RASHI HEADER -->
+        <div style="background: var(--bg-card); border: 2px solid var(--border-gold); padding: 2.5rem; border-radius: var(--border-radius-lg); margin-bottom: 2.5rem; box-shadow: var(--shadow-soft);">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+                <div style="display: flex; align-items: center; gap: 1.2rem;">
+                    <span style="font-size: 3.5rem; color: var(--saffron-primary);">{{ zodiac_info.icon }}</span>
+                    <div>
+                        <h1 class="heading-sacred" style="margin: 0; color: var(--text-main); font-size: 2.2rem;">
+                            {{ zodiac_info.hi }} दैनिक राशिफल ({{ zodiac_info.en }})
+                        </h1>
+                        <span style="color: var(--text-muted); font-size: 0.95rem;">दिनांक: {{ current_date }}</span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.8rem; align-items: center;">
+                    <span style="background: var(--saffron-light); color: var(--saffron-dark); font-weight: 600; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">
+                        🔢 लकी नंबर: {{ rashifal.lucky_number }}
+                    </span>
+                    <span style="background: var(--bg-card-alt); border: 1px solid var(--border-color); font-weight: 600; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">
+                        🎨 शुभ रंग: {{ rashifal.lucky_color }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- OVERVIEW SUMMARY -->
+            <div style="background: var(--bg-card-alt); padding: 1.5rem; border-radius: 10px; border-left: 5px solid var(--saffron-primary); margin-bottom: 2rem;">
+                <h3 style="color: var(--saffron-primary); margin-top: 0; margin-bottom: 0.6rem;">🌟 आज का मुख्य राशिफल सार</h3>
+                <p style="font-size: 1.1rem; line-height: 1.7; margin: 0; color: var(--text-main);">
+                    {{ rashifal.summary }}
+                </p>
+            </div>
+
+            <!-- DETAILED CATEGORIES GRID -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 1.5rem;">
+                <!-- Career -->
+                <div style="padding: 1.5rem; background: var(--bg-card-alt); border-radius: 10px; border: 1px solid var(--border-color);">
+                    <h4 style="color: var(--saffron-primary); margin-top: 0; display: flex; align-items: center; gap: 0.5rem;">
+                        💼 करियर एवं नौकरी (Career)
+                    </h4>
+                    <p style="margin: 0; line-height: 1.6; color: var(--text-muted);">{{ rashifal.career or rashifal.summary }}</p>
+                </div>
+
+                <!-- Business -->
+                <div style="padding: 1.5rem; background: var(--bg-card-alt); border-radius: 10px; border: 1px solid var(--border-color);">
+                    <h4 style="color: var(--saffron-primary); margin-top: 0; display: flex; align-items: center; gap: 0.5rem;">
+                        🏢 व्यापार व व्यवसाय (Business)
+                    </h4>
+                    <p style="margin: 0; line-height: 1.6; color: var(--text-muted);">{{ rashifal.business or rashifal.summary }}</p>
+                </div>
+
+                <!-- Finance -->
+                <div style="padding: 1.5rem; background: var(--bg-card-alt); border-radius: 10px; border: 1px solid var(--border-color);">
+                    <h4 style="color: var(--saffron-primary); margin-top: 0; display: flex; align-items: center; gap: 0.5rem;">
+                        💰 धन एवं आर्थिक स्थिति (Finance)
+                    </h4>
+                    <p style="margin: 0; line-height: 1.6; color: var(--text-muted);">{{ rashifal.finance or rashifal.summary }}</p>
+                </div>
+
+                <!-- Love -->
+                <div style="padding: 1.5rem; background: var(--bg-card-alt); border-radius: 10px; border: 1px solid var(--border-color);">
+                    <h4 style="color: var(--saffron-primary); margin-top: 0; display: flex; align-items: center; gap: 0.5rem;">
+                        ❤️ प्रेम संबंध एवं दांपत्य (Love & Marriage)
+                    </h4>
+                    <p style="margin: 0; line-height: 1.6; color: var(--text-muted);">{{ rashifal.love or rashifal.summary }}</p>
+                </div>
+
+                <!-- Family -->
+                <div style="padding: 1.5rem; background: var(--bg-card-alt); border-radius: 10px; border: 1px solid var(--border-color);">
+                    <h4 style="color: var(--saffron-primary); margin-top: 0; display: flex; align-items: center; gap: 0.5rem;">
+                        👨‍👩‍👧‍👦 परिवार व समाज (Family)
+                    </h4>
+                    <p style="margin: 0; line-height: 1.6; color: var(--text-muted);">{{ rashifal.family or rashifal.summary }}</p>
+                </div>
+
+                <!-- Health -->
+                <div style="padding: 1.5rem; background: var(--bg-card-alt); border-radius: 10px; border: 1px solid var(--border-color);">
+                    <h4 style="color: var(--saffron-primary); margin-top: 0; display: flex; align-items: center; gap: 0.5rem;">
+                        🩺 स्वास्थ्य एवं ऊर्जा (Health)
+                    </h4>
+                    <p style="margin: 0; line-height: 1.6; color: var(--text-muted);">{{ rashifal.health or rashifal.summary }}</p>
+                </div>
+            </div>
+
+            <!-- TODAY'S ADVICE -->
+            <div style="margin-top: 2rem; background: #FEF3C7; border: 1px solid #F59E0B; padding: 1.5rem; border-radius: 10px; color: #78350F;">
+                <h4 style="margin-top: 0; color: #92400E; display: flex; align-items: center; gap: 0.5rem;">
+                    🪔 आज का विशेष शास्त्रोक्त उपाय एवं सलाह (Today's Remedy)
+                </h4>
+                <p style="margin: 0; line-height: 1.6; font-weight: 500;">
+                    {{ rashifal.advice or "इष्ट देव का स्मरण करें और हनुमान चालीसा का पाठ करें।" }}
+                </p>
+            </div>
+
+            <div style="text-align: center; margin-top: 2.5rem;">
+                <a href="{{ url_for('main.consultation_page') }}" class="btn btn-saffron" style="padding: 0.8rem 2rem; font-size: 1.1rem;">
+                    🪔 व्यक्तिगत कुंडली परामर्श बुक करें
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

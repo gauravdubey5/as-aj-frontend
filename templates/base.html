@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ SITE_CONFIG.brand_name }} | {{ SITE_CONFIG.secondary_title_en }}{% endblock %}</title>
+    <meta name="description" content="एस्ट्रो आशीष जी - प्रामाणिक वैदिक ज्योतिषी एवं वास्तु शास्त्री। जन्म कुंडली विश्लेषण, कुंडली मिलान, ग्रह शांति एवं वास्तु परामर्श। Authentic Vedic Astrology Consultations.">
+    <meta name="keywords" content="Astro Ashish Ji, एस्ट्रो आशीष जी, Vedic Astrologer, Vastu Shastri, Kundli Analysis, Kundli Milan, Graha Shanti, Online Pooja, Vedic Astrology India, NRI Astrologer">
+    <meta name="author" content="{{ SITE_CONFIG.brand_name }}">
+    <meta name="robots" content="index, follow">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="{{ SITE_CONFIG.brand_name }} | {{ SITE_CONFIG.secondary_title_en }}">
+    <meta property="og:description" content="Find clarity, peace, and direction through authentic Vedic astrology and scriptural remedies.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ WEBSITE_URL }}">
+    <meta property="og:image" content="{{ url_for('static', filename='images/astro-ashish-og.jpg') }}">
+
+    <!-- Twitter Card Metadata -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ SITE_CONFIG.brand_name }} | Vedic Astrologer">
+    <meta name="twitter:description" content="Authentic Vedic Astrological Guidance & Divine Remedies by Astro Ashish Ji.">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+    {% block extra_css %}{% endblock %}
+
+    <!-- Structured Data JSON-LD (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Astro Ashish Ji",
+      "alternateName": "एस्ट्रो आशीष जी",
+      "jobTitle": "Vedic Astrologer & Vastu Shastri",
+      "description": "Authentic Vedic Astrology and Vastu Shastra consultant offering Kundli analysis, matchmaking, and planetary remedies.",
+      "url": "{{ WEBSITE_URL }}",
+      "telephone": "{{ SITE_CONFIG.display_phone }}",
+      "knowsLanguage": ["Hindi", "English"],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Vedic Astrological Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Janam Kundli Deep Analysis"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Kundli Milan & Matchmaking"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Vastu Shastra Consultation"
+            }
+          }
+        ]
+      }
+    }
+    </script>
+</head>
+<body>
+
+    <!-- Top Sacred Shloka Banner -->
+    <div class="top-sacred-banner">
+        <div class="container top-sacred-content">
+            <div class="shloka-text" data-i18n="topbanner.text">
+                ॥ श्री गणेशाय नमः ॥ • ॥ ॐ नमः शिवाय ॥ • ॥ श्री हनुमते नमः ॥
+            </div>
+            <div class="top-banner-actions">
+                <a href="tel:{{ SITE_CONFIG.phone_tel }}" class="dynamic-phone-link">
+                    📞 <span data-i18n="topbanner.call">सीधा संपर्क करें: {{ SITE_CONFIG.display_phone }}</span>
+                </a>
+                <a href="https://wa.me/{{ SITE_CONFIG.whatsapp_number }}?text={{ SITE_CONFIG.whatsapp_default_msg_hi | urlencode }}" class="dynamic-wa-link" target="_blank">
+                    💬 <span data-i18n="topbanner.whatsapp">व्हाट्सएप परामर्श</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header & Sticky Navigation -->
+    <header class="site-header">
+        <div class="container header-container">
+            <!-- Logo with CSS Fallback Emblem -->
+            <a href="{{ url_for('main.index') }}" class="site-logo">
+                <div class="logo-emblem" aria-hidden="true">ॐ</div>
+                <div class="logo-text">
+                    <span class="logo-title-hi">{{ SITE_CONFIG.brand_name_hi }}</span>
+                    <span class="logo-title-en">{{ SITE_CONFIG.primary_brand }}</span>
+                    <span class="logo-subtitle">{{ SITE_CONFIG.secondary_title_en }}</span>
+                </div>
+            </a>
+
+            <!-- Main Desktop Nav -->
+            <nav class="main-nav" aria-label="Main Navigation">
+                <ul>
+                    <li><a href="{{ url_for('main.index') }}" class="{% if request.endpoint == 'main.index' %}active{% endif %}" data-i18n="nav.home">मुख्य पृष्ठ</a></li>
+                    <li><a href="{{ url_for('main.services_page') }}" class="{% if request.endpoint == 'main.services_page' %}active{% endif %}" data-i18n="nav.services">वैदिक सेवाएं</a></li>
+                    <li><a href="{{ url_for('main.panchang_page') }}" class="{% if request.endpoint == 'main.panchang_page' %}active{% endif %}" data-i18n="nav.panchang">पंचांग व राशिफल</a></li>
+                    <li><a href="{{ url_for('main.pooja_page') }}" class="{% if request.endpoint == 'main.pooja_page' %}active{% endif %}" data-i18n="nav.pooja">पूजा व अनुष्ठान</a></li>
+                    <li><a href="{{ url_for('main.about_page') }}" class="{% if request.endpoint == 'main.about_page' %}active{% endif %}" data-i18n="nav.about">परिचय</a></li>
+                    <li><a href="{{ url_for('main.consultation_page') }}" class="{% if request.endpoint == 'main.consultation_page' %}active{% endif %}" data-i18n="nav.consultation">परामर्श बुक करें</a></li>
+                </ul>
+            </nav>
+
+            <!-- Right Header Controls -->
+            <div class="header-right-controls">
+                <!-- Theme Switcher -->
+                <div class="theme-switcher">
+                    <button class="theme-toggle-btn" aria-label="Toggle Dark/Light Theme">
+                        <span class="theme-icon">🌙</span>
+                        <span class="theme-label" data-i18n="theme.toggleDark">मंदिर डार्क थीम</span>
+                    </button>
+                </div>
+
+                <!-- Language Switcher -->
+                <div class="lang-switcher" role="group" aria-label="Language Switcher">
+                    <button class="lang-switch-btn active" data-lang="hi" aria-pressed="true">हिन्दी</button>
+                    <button class="lang-switch-btn" data-lang="en" aria-pressed="false">English</button>
+                </div>
+
+                <!-- Desktop CTA Button -->
+                <a href="{{ url_for('main.consultation_page') }}" class="btn btn-saffron desktop-consult-btn" data-i18n="nav.consultation">
+                    परामर्श बुक करें
+                </a>
+
+                <!-- Mobile Hamburger Button -->
+                <button class="nav-hamburger" aria-label="Open Mobile Menu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Nav Drawer -->
+    <div class="mobile-nav-overlay"></div>
+    <div class="mobile-nav-drawer" aria-label="Mobile Navigation">
+        <ul>
+            <li><a href="{{ url_for('main.index') }}" data-i18n="nav.home">मुख्य पृष्ठ</a></li>
+            <li><a href="{{ url_for('main.services_page') }}" data-i18n="nav.services">वैदिक सेवाएं</a></li>
+            <li><a href="{{ url_for('main.panchang_page') }}" data-i18n="nav.panchang">पंचांग व राशिफल</a></li>
+            <li><a href="{{ url_for('main.pooja_page') }}" data-i18n="nav.pooja">पूजा व अनुष्ठान</a></li>
+            <li><a href="{{ url_for('main.about_page') }}" data-i18n="nav.about">परिचय</a></li>
+            <li><a href="{{ url_for('main.consultation_page') }}" data-i18n="nav.consultation">परामर्श बुक करें</a></li>
+        </ul>
+        <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem;">
+            <a href="{{ url_for('main.consultation_page') }}" class="btn btn-saffron" style="width: 100%;" data-i18n="hero.ctaPrimary">कुंडली परामर्श बुक करें</a>
+            <a href="https://wa.me/{{ SITE_CONFIG.whatsapp_number }}?text={{ SITE_CONFIG.whatsapp_default_msg_hi | urlencode }}" class="btn btn-whatsapp dynamic-wa-link" style="width: 100%;" target="_blank" data-i18n="hero.ctaSecondary">व्हाट्सएप पर बात करें</a>
+        </div>
+    </div>
+
+    <!-- Flash Messages Container -->
+    <div class="container" style="margin-top: 1rem;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}" style="padding: 1rem; margin-bottom: 1rem; border-radius: 8px; background: {% if category == 'success' %}#D1FAE5{% elif category == 'danger' %}#FEE2E2{% else %}#FEF3C7{% endif %}; color: #190E06; border: 1px solid #F59E0B;">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Dynamic Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Mobile Fixed Bottom Navigation Bar -->
+    <div class="mobile-bottom-fixed-nav" style="position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-header); border-top: 1px solid var(--border-gold); z-index: 1000; display: flex; justify-content: space-around; padding: 0.6rem 0; box-shadow: 0 -4px 15px rgba(0,0,0,0.1);">
+        <a href="tel:{{ SITE_CONFIG.phone_tel }}" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--text-main); font-size: 0.8rem; font-weight: 600;">
+            <span style="font-size: 1.2rem;">📞</span> Call
+        </a>
+        <a href="https://wa.me/{{ SITE_CONFIG.whatsapp_number }}?text={{ SITE_CONFIG.whatsapp_default_msg_hi | urlencode }}" target="_blank" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #16a34a; font-size: 0.8rem; font-weight: 600;">
+            <span style="font-size: 1.2rem;">💬</span> WhatsApp
+        </a>
+        <a href="{{ url_for('main.consultation_page') }}" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--saffron-primary); font-size: 0.8rem; font-weight: 600;">
+            <span style="font-size: 1.2rem;">📅</span> Book
+        </a>
+    </div>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <!-- Brand Column -->
+            <div class="footer-col brand-col">
+                <a href="{{ url_for('main.index') }}" class="site-logo">
+                    <div class="logo-emblem" aria-hidden="true">ॐ</div>
+                    <div class="logo-text">
+                        <span class="logo-title-hi">{{ SITE_CONFIG.brand_name_hi }}</span>
+                        <span class="logo-title-en">{{ SITE_CONFIG.primary_brand }}</span>
+                    </div>
+                </a>
+                <p class="footer-desc" data-i18n="footer.desc">
+                    प्रामाणिक वैदिक ज्योतिष एवं वास्तु शास्त्र द्वारा जीवन की समस्याओं का अचूक एवं गोपनीय समाधान।
+                </p>
+                <div class="footer-contact-info">
+                    <p><strong>📞 Contact:</strong> <a href="tel:{{ SITE_CONFIG.phone_tel }}">{{ SITE_CONFIG.display_phone }}</a></p>
+                    <p><strong>💬 WhatsApp:</strong> <a href="https://wa.me/{{ SITE_CONFIG.whatsapp_number }}" target="_blank">+91 884 042 5538</a></p>
+                    <p><strong>📧 Email:</strong> <span>{{ SITE_CONFIG.email }}</span></p>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="footer-col">
+                <h4 class="footer-heading" data-i18n="footer.quickLinks">त्वरित लिंक</h4>
+                <ul class="footer-links">
+                    <li><a href="{{ url_for('main.index') }}" data-i18n="nav.home">मुख्य पृष्ठ</a></li>
+                    <li><a href="{{ url_for('main.services_page') }}" data-i18n="nav.services">वैदिक सेवाएं</a></li>
+                    <li><a href="{{ url_for('main.panchang_page') }}" data-i18n="nav.panchang">दैनिक पंचांग</a></li>
+                    <li><a href="{{ url_for('main.pooja_page') }}" data-i18n="nav.pooja">ऑनलाइन पूजा</a></li>
+                    <li><a href="{{ url_for('main.consultation_page') }}" data-i18n="nav.consultation">परामर्श बुक करें</a></li>
+                </ul>
+            </div>
+
+            <!-- Legal & Privacy -->
+            <div class="footer-col">
+                <h4 class="footer-heading">गोपनीयता एवं नीतियां</h4>
+                <ul class="footer-links">
+                    <li><a href="{{ url_for('main.privacy_policy') }}">Privacy Policy (गोपनीयता नीति)</a></li>
+                    <li><a href="{{ url_for('main.terms') }}">Terms & Conditions (नियम व शर्तें)</a></li>
+                    <li><a href="{{ url_for('main.disclaimer') }}">Astrology Disclaimer (अस्वीकरण)</a></li>
+                    <li><a href="{{ url_for('admin.login') }}">Admin Login</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container footer-bottom-content">
+                <p>© 2026 {{ SITE_CONFIG.brand_name }} (एस्ट्रो आशीष जी). All Rights Reserved.</p>
+                <p class="footer-disclaimer-text">
+                    * ज्योतिषीय परामर्श आध्यात्मिक मार्गदर्शन हेतु है।
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="{{ url_for('static', filename='js/config.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/language.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/booking.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

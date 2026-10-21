@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}परामर्श पुष्टि | Booking Confirmation - {{ consultation.booking_reference }}{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container" style="max-width: 700px;">
+        <div style="background: var(--bg-card); border: 2px solid var(--border-gold); padding: 3rem 2rem; border-radius: var(--border-radius-lg); text-center; box-shadow: var(--shadow-hover);">
+            <div style="font-size: 3.5rem; margin-bottom: 1rem;">🙏</div>
+            <h2 class="heading-sacred" style="color: var(--saffron-primary); margin-bottom: 0.5rem;">धन्यवाद! (Thank You)</h2>
+            <p style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1.5rem;">
+                आपकी परामर्श अनुरोध सफलतापूर्वक दर्ज कर ली गई है।
+            </p>
+
+            <div style="background: var(--bg-card-alt); border: 1px dashed var(--border-gold); padding: 1.2rem; border-radius: var(--border-radius-md); margin-bottom: 2rem; display: inline-block; width: 100%;">
+                <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Booking Reference Number</div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: var(--saffron-primary); letter-spacing: 2px; margin-top: 0.2rem;">
+                    {{ consultation.booking_reference }}
+                </div>
+            </div>
+
+            <!-- Summary Details -->
+            <div style="text-align: left; background: var(--bg-main); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border: 1px solid var(--border-color);">
+                <h4 style="color: var(--saffron-primary); margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">बुकिंग विवरण (Booking Summary)</h4>
+                <p><strong>श्रद्धालु का नाम:</strong> {{ consultation.full_name }}</p>
+                <p><strong>परामर्श प्रकार:</strong> {{ consultation.consultation_type }}</p>
+                <p><strong>जन्म विवरण:</strong> {{ consultation.date_of_birth }} | {{ consultation.birth_time or 'ज्ञात नहीं' }} | {{ consultation.birth_place }}</p>
+                <p><strong>व्हाट्सएप नंबर:</strong> {{ consultation.whatsapp_number }}</p>
+                <p><strong>स्थिति (Status):</strong> <span style="font-weight: 700; color: #D97706; text-transform: capitalize;">{{ consultation.status }}</span></p>
+                {% if consultation.meeting_url %}
+                <p style="margin-top: 1rem; padding: 0.8rem; background: #D1FAE5; border-radius: 6px; color: #065F46;">
+                    <strong>📹 Meeting Link:</strong> <a href="{{ consultation.meeting_url }}" target="_blank" style="color: #065F46; text-decoration: underline;">Join Online Meeting</a>
+                </p>
+                {% endif %}
+            </div>
+
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">
+                Astro Ashish Ji की टीम जल्द ही आपसे व्हाट्सएप या कॉल के माध्यम से संपर्क करेगी।
+            </p>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+                <a href="{{ wa_url_hi }}" target="_blank" class="btn btn-whatsapp" style="padding: 0.8rem 1.5rem;">
+                    💬 व्हाट्सएप पर बात करें
+                </a>
+                <a href="tel:{{ SITE_CONFIG.phone_tel }}" class="btn btn-saffron" style="padding: 0.8rem 1.5rem;">
+                    📞 कॉल करें ({{ SITE_CONFIG.display_phone }})
+                </a>
+                <a href="{{ url_for('main.index') }}" class="btn btn-outline-saffron" style="padding: 0.8rem 1.5rem;">
+                    मुख्य पृष्ठ पर जाएं
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

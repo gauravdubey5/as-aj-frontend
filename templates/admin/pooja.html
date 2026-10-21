@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pooja Management | Admin</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #F4F6F8; color: #111827; }
+        .admin-header { background: #1F2937; color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .admin-brand { font-size: 1.2rem; font-weight: 700; color: #F59E0B; }
+        .admin-nav { display: flex; gap: 1.5rem; }
+        .admin-nav a { color: #D1D5DB; text-decoration: none; font-size: 0.95rem; font-weight: 500; }
+        .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+        .card { background: #fff; padding: 1.5rem; border-radius: 8px; border: 1px solid #E5E7EB; margin-bottom: 1.5rem; }
+        input, textarea { width: 100%; padding: 0.7rem; border-radius: 6px; border: 1px solid #D1D5DB; margin-bottom: 0.8rem; }
+        .btn { padding: 0.7rem 1.2rem; background: #B45309; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 0.8rem; border-bottom: 1px solid #E5E7EB; text-align: left; }
+        .alert { padding: 0.8rem; background: #D1FAE5; color: #065F46; border-radius: 6px; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="admin-brand">Astro Ashish Ji • Pooja Management</div>
+        <nav class="admin-nav">
+            <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('admin.bookings') }}">Bookings</a>
+            <a href="{{ url_for('admin.services') }}">Services</a>
+            <a href="{{ url_for('admin.pooja') }}" style="color:#FFF; font-weight:700;">Pooja</a>
+            <a href="{{ url_for('admin.testimonials') }}">Testimonials</a>
+            <a href="{{ url_for('admin.contacts') }}">Enquiries</a>
+            <a href="{{ url_for('admin.horoscope') }}">Horoscope</a>
+            <a href="{{ url_for('admin.logout') }}" style="color: #F87171;">Logout</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <h2 style="margin-bottom: 1rem;">Online Pooja Services</h2>
+
+        <div class="card">
+            <h3>Add New Pooja Service</h3>
+            <form action="{{ url_for('admin.pooja') }}" method="POST" style="margin-top: 1rem;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="action" value="add">
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <input type="text" name="name_hi" placeholder="Pooja Name (Hindi)" required>
+                    <input type="text" name="name_en" placeholder="Pooja Name (English)" required>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <input type="number" step="0.01" name="price" placeholder="Price (INR)" required>
+                    <input type="text" name="duration" placeholder="Duration (e.g. 2.5 Hours)" required>
+                </div>
+                <textarea name="description_hi" placeholder="Description (Hindi)" rows="2"></textarea>
+                <textarea name="description_en" placeholder="Description (English)" rows="2"></textarea>
+                
+                <div style="margin-bottom: 1rem;">
+                    <label><input type="checkbox" name="prasad_available" checked> Prasad Courier Available</label> &nbsp;&nbsp;
+                    <label><input type="checkbox" name="live_sankalp_available" checked> Live Video Sankalp</label>
+                </div>
+                <button type="submit" class="btn">Add Pooja Service</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>Configured Pooja List</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name (Hindi / English)</th>
+                        <th>Price</th>
+                        <th>Duration</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in poojas %}
+                    <tr>
+                        <td>{{ p.id }}</td>
+                        <td><strong>{{ p.name_hi }}</strong><br><small>{{ p.name_en }}</small></td>
+                        <td>₹{{ p.price | int }}</td>
+                        <td>{{ p.duration }}</td>
+                        <td>
+                            {% if p.is_active %}
+                            <span style="color: #059669; font-weight: 700;">Active</span>
+                            {% else %}
+                            <span style="color: #DC2626; font-weight: 700;">Disabled</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form action="{{ url_for('admin.pooja') }}" method="POST" style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="action" value="toggle">
+                                <input type="hidden" name="pooja_id" value="{{ p.id }}">
+                                <button type="submit" style="background: none; border: none; color: #B45309; font-weight: 600; cursor: pointer;">
+                                    {% if p.is_active %}Disable{% else %}Enable{% endif %}
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

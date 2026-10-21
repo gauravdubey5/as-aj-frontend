@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}एस्ट्रो आशीष जी परिचय | {{ SITE_CONFIG.brand_name }}{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container" style="max-width: 850px;">
+        <div class="section-header text-center">
+            <div class="section-tag">संस्थान परिचय</div>
+            <h2 class="section-title heading-sacred">एस्ट्रो आशीष जी (Vedic Astrologer & Vastu Shastri)</h2>
+        </div>
+
+        <div style="background: var(--bg-card); padding: 3rem; border-radius: var(--border-radius-lg); border: 1px solid var(--border-gold); box-shadow: var(--shadow-soft);">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <div style="font-size: 3rem; color: var(--saffron-primary);">ॐ</div>
+                <h3 class="heading-sacred" style="color: var(--saffron-primary);">एस्ट्रो आशीष जी</h3>
+                <p style="color: var(--text-muted); font-weight: 600;">वैदिक ज्योतिषी एवं वास्तु शास्त्री</p>
+            </div>
+
+            <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+                एस्ट्रो आशीष जी वैदिक ज्योतिष, अष्टकवर्ग, पराशरी सिद्धांत, कृष्णमूर्ति पद्धति (KP System) एवं वास्तु शास्त्र के प्रख्यात विशेषज्ञ हैं। विगत 20 से अधिक वर्षों से वे देश-विदेश के हजारों श्रद्धालुओं को जीवन के विभिन्न क्षेत्रों—जैसे करियर, व्यवसाय, विवाह, स्वास्थ्य, संपत्ति, एवं ग्रह-शांति—में सटीक एवं अचूक शास्त्रोक्त मार्गदर्शन प्रदान कर रहे हैं।
+            </p>
+
+            <h4 style="color: var(--saffron-primary); margin-top: 2rem; margin-bottom: 1rem;" class="heading-sacred">हमारी कार्यप्रणाली एवं सिद्धांत:</h4>
+            <ul style="margin-bottom: 2rem; padding-left: 1.5rem; line-height: 2;">
+                <li><strong>सूक्ष्म जन्म कुंडली विश्लेषण:</strong> लग्न, भाव, ग्रह बल, महादशा व अंतर्दशा का वैज्ञानिक अध्ययन।</li>
+                <li><strong>सरल एवं शास्त्रोक्त समाधान:</strong> बिना किसी अनावश्यक जटिलता के सात्विक मंत्र जाप, दान एवं स्तोत्र पाठ।</li>
+                <li><strong>बिना तोड-फोड वास्तु उपाय:</strong> गृह व व्यावसायिक स्थलों में ऊर्जा संतुलन हेतु प्रामाणिक दिशा-शोधन।</li>
+                <li><strong>100% गोपनीयता:</strong> श्रद्धालुओं के व्यक्तिगत विवरण व परामर्श की पूर्ण गोपनीयता।</li>
+            </ul>
+
+            <div style="text-align: center; background: var(--bg-card-alt); padding: 1.5rem; border-radius: var(--border-radius-md); border: 1px solid var(--border-gold);">
+                <p style="font-weight: 700; margin-bottom: 0.8rem;">सीधा संपर्क करें / Direct Contact:</p>
+                <p>📞 <strong>Phone:</strong> <a href="tel:{{ SITE_CONFIG.phone_tel }}">{{ SITE_CONFIG.display_phone }}</a></p>
+                <p>💬 <strong>WhatsApp:</strong> <a href="https://wa.me/{{ SITE_CONFIG.whatsapp_number }}" target="_blank">+91 884 042 5538</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

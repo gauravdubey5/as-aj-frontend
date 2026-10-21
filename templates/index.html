@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+
+{% block title %}{{ SITE_CONFIG.brand_name }} | {{ SITE_CONFIG.secondary_title_en }}{% endblock %}
+
+{% block content %}
+<!-- HERO SECTION -->
+<section class="hero-section">
+    <div class="container hero-grid">
+        <div class="hero-content animate-reveal">
+            <div class="hero-badge" data-i18n="hero.badge">
+                ✨ प्रामाणिक वैदिक ज्योतिष एवं वास्तु संस्थान
+            </div>
+            <h1 class="hero-title heading-sacred" data-i18n="hero.title">
+                वैदिक ज्योतिष एवं शास्त्रोक्त मार्गदर्शन द्वारा जीवन में सुख, शांति एवं समृद्धि
+            </h1>
+            <p class="hero-subtitle" data-i18n="hero.subtitle">
+                पूज्य एस्ट्रो आशीष जी द्वारा आपकी जन्म कुंडली का सूक्ष्म विश्लेषण एवं अचूक शास्त्रोक्त समाधान
+            </p>
+
+            <div class="hero-cta-group">
+                <a href="{{ url_for('main.consultation_page') }}" class="btn btn-saffron" data-i18n="hero.ctaPrimary">
+                    🪔 कुंडली परामर्श बुक करें
+                </a>
+                <a href="https://wa.me/{{ SITE_CONFIG.whatsapp_number }}?text={{ SITE_CONFIG.whatsapp_default_msg_hi | urlencode }}" class="btn btn-whatsapp dynamic-wa-link" target="_blank" data-i18n="hero.ctaSecondary">
+                    💬 व्हाट्सएप पर बात करें
+                </a>
+            </div>
+
+            <div class="hero-trust-bullets">
+                <div class="trust-bullet-item">
+                    <span class="bullet-icon">✓</span>
+                    <span data-i18n="hero.stat1">20+ वर्ष वैदिक अनुभव</span>
+                </div>
+                <div class="trust-bullet-item">
+                    <span class="bullet-icon">✓</span>
+                    <span data-i18n="hero.stat2">25,000+ कुंडलियों का सटीक विश्लेषण</span>
+                </div>
+                <div class="trust-bullet-item">
+                    <span class="bullet-icon">✓</span>
+                    <span data-i18n="hero.stat3">ग्लोबल एनआरआई श्रद्धालु (USA, UK, Canada, UAE)</span>
+                </div>
+                <div class="trust-bullet-item">
+                    <span class="bullet-icon">✓</span>
+                    <span data-i18n="hero.stat4">100% गोपनीय परामर्श</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-visual animate-reveal">
+            <div class="hero-mandala-bg"></div>
+            <div class="hero-card-featured">
+                <div class="featured-badge">शास्त्रोक्त मार्गदर्शन</div>
+                <div class="astrologer-image-placeholder">
+                    <div class="sacred-om-watermark">ॐ</div>
+                </div>
+                <h3 class="hero-astrologer-name">{{ SITE_CONFIG.brand_name_hi }}</h3>
+                <p class="hero-astrologer-title">{{ SITE_CONFIG.secondary_title_hi }}</p>
+                <div class="hero-contact-badge">
+                    📞 {{ SITE_CONFIG.display_phone }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TRUST STRIP -->
+<section class="trust-strip">
+    <div class="container trust-strip-grid">
+        <div class="trust-stat-card">
+            <div class="stat-number" data-count="20" data-i18n="trust.years">20+</div>
+            <div class="stat-label" data-i18n="trust.yearsText">वर्षों का अनुभूत वैदिक अनुभव</div>
+        </div>
+        <div class="trust-stat-card">
+            <div class="stat-number" data-count="25000" data-i18n="trust.horoscopes">25,000+</div>
+            <div class="stat-label" data-i18n="trust.horoscopesText">सटीक कुंडली विश्लेषण</div>
+        </div>
+        <div class="trust-stat-card">
+            <div class="stat-number" data-count="15" data-i18n="trust.countries">15+</div>
+            <div class="stat-label" data-i18n="trust.countriesText">देशों में संतुष्ट श्रद्धालु</div>
+        </div>
+        <div class="trust-stat-card">
+            <div class="stat-number" data-i18n="trust.satisfaction">100%</div>
+            <div class="stat-label" data-i18n="trust.satisfactionText">पूर्ण गोपनीय एवं शास्त्रोक्त परामर्श</div>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICES SECTION -->
+<section id="services" class="services-section section-padding">
+    <div class="container">
+        <div class="section-header text-center">
+            <div class="section-tag" data-i18n="services.tag">शास्त्रोक्त समाधान</div>
+            <h2 class="section-title heading-sacred" data-i18n="services.sectionTitle">प्रमुख वैदिक सेवाएं</h2>
+            <p class="section-subtitle" data-i18n="services.sectionSubtitle">
+                जीवन की कठिन से कठिन समस्याओं का प्राचीन वैदिक ग्रंथों के अनुसार प्रामाणिक समाधान
+            </p>
+        </div>
+
+        <div class="services-grid">
+            {% for service in services %}
+            <div class="service-card">
+                <div class="service-icon-box">🪔</div>
+                <h3 class="service-title">{{ service.name_hi }}</h3>
+                <p class="service-desc">{{ service.short_description_hi }}</p>
+                <div class="service-meta" style="margin-bottom: 1rem; color: var(--saffron-primary); font-weight: 600;">
+                    ⏱️ Duration: {{ service.duration }}
+                </div>
+                <a href="{{ url_for('main.consultation_page') }}" class="btn btn-outline-saffron" style="width: 100%;">
+                    परामर्श बुक करें
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- PANCHANG & RASHIFAL SECTION -->
+<section id="panchang" class="panchang-section section-padding bg-alt">
+    <div class="container">
+        <div class="section-header text-center">
+            <div class="section-tag">ग्रह-नक्षत्र स्थिति</div>
+            <h2 class="section-title heading-sacred" data-i18n="panchang.sectionTitle">दैनिक पंचांग एवं 12 राशि राशिफल</h2>
+            <p class="section-subtitle" data-i18n="panchang.sectionSubtitle">
+                आज का पंचांग ग्रहों की स्थिति और शुभ योगों की सटीक जानकारी देता है
+            </p>
+        </div>
+
+        <!-- Daily Panchang Grid -->
+        <div class="panchang-card-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+            <div class="panchang-info-box" style="background: var(--bg-card); padding: 1.5rem; border-radius: var(--border-radius-md); border: 1px solid var(--border-gold);">
+                <h4 style="color: var(--saffron-primary);">📅 तिथि (Tithi)</h4>
+                <p>{{ panchang.tithi.hi }}</p>
+            </div>
+            <div class="panchang-info-box" style="background: var(--bg-card); padding: 1.5rem; border-radius: var(--border-radius-md); border: 1px solid var(--border-gold);">
+                <h4 style="color: var(--saffron-primary);">⭐ नक्षत्र (Nakshatra)</h4>
+                <p>{{ panchang.nakshatra.hi }}</p>
+            </div>
+            <div class="panchang-info-box" style="background: var(--bg-card); padding: 1.5rem; border-radius: var(--border-radius-md); border: 1px solid var(--border-gold);">
+                <h4 style="color: var(--saffron-primary);">☀️ सूर्य व चंद्र उदय/अस्त</h4>
+                <p>सूर्योदय: {{ panchang.sunMoon.sunrise }} | सूर्यास्त: {{ panchang.sunMoon.sunset }}</p>
+            </div>
+        </div>
+
+        <div class="text-center" style="margin-top: 1.5rem;">
+            <a href="{{ url_for('main.panchang_page') }}" class="btn btn-saffron">विस्तृत 12 राशि दैनिक राशिफल देखें</a>
+        </div>
+    </div>
+</section>
+
+<!-- POOJA SECTION -->
+<section id="pooja" class="pooja-section section-padding">
+    <div class="container">
+        <div class="section-header text-center">
+            <div class="section-tag">लाइव अनुष्ठान</div>
+            <h2 class="section-title heading-sacred" data-i18n="pooja.sectionTitle">ऑनलाइन पूजा एवं वैदिक अनुष्ठान</h2>
+            <p class="section-subtitle" data-i18n="pooja.sectionSubtitle">
+                शुद्ध वैदिक पद्धति एवं संकल्प द्वारा सिद्ध आचार्यों द्वारा लाइव वैदिक अनुष्ठान
+            </p>
+        </div>
+
+        <div class="pooja-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+            {% for pooja in poojas %}
+            <div class="pooja-card" style="background: var(--bg-card); border: 1px solid var(--border-gold); padding: 2rem; border-radius: var(--border-radius-md); box-shadow: var(--shadow-soft);">
+                <h3 style="color: var(--saffron-primary); margin-bottom: 0.8rem;">{{ pooja.name_hi }}</h3>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">{{ pooja.description_hi }}</p>
+                <div style="margin-bottom: 1.2rem; font-size: 0.9rem; color: var(--text-main);">
+                    <span>✔ लाइव वीडियो संकल्प</span> | <span>✔ प्रसाद डाक सेवा</span>
+                </div>
+                <a href="https://wa.me/{{ SITE_CONFIG.whatsapp_number }}?text={{ ('प्रणाम पंडित जी, मुझे ' + pooja.name_hi + ' पूजा का संकल्प करवाना है।') | urlencode }}" target="_blank" class="btn btn-whatsapp" style="width: 100%;">
+                    💬 पूजा संकल्प बुक करें
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT SECTION -->
+<section id="about" class="about-section section-padding bg-alt">
+    <div class="container about-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;">
+        <div class="about-content">
+            <div class="section-tag">परिचय</div>
+            <h2 class="section-title heading-sacred">{{ SITE_CONFIG.brand_name }} (एस्ट्रो आशीष जी)</h2>
+            <p style="margin-bottom: 1rem; line-height: 1.8;">
+                एस्ट्रो आशीष जी भारत के प्रमुख प्रामाणिक वैदिक ज्योतिषियों एवं वास्तु शास्त्रियों में गिने जाते हैं। 20 से अधिक वर्षों के अनवरत अनुष्ठान, स्वाध्याय एवं हजारों श्रद्धालुओं के मार्ग दर्शन के अनुभव से उन्होंने अनगिनत परिवारों के जीवन में सुख, शांति और समृद्धि का संचार किया है।
+            </p>
+            <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+                आपका मानना है कि ज्योतिष शास्त्र कोई अंधविश्वास नहीं अपितु ग्रहों की ऊर्जा और मनुष्य के कर्मों का एक अत्यंत सटीक व वैज्ञानिक विश्लेषण है।
+            </p>
+            <a href="{{ url_for('main.about_page') }}" class="btn btn-saffron">विस्तृत परिचय पढ़ें</a>
+        </div>
+        <div class="about-visual" style="background: var(--bg-card); padding: 2.5rem; border-radius: var(--border-radius-lg); border: 2px solid var(--border-gold); text-center;">
+            <div style="font-size: 4rem; color: var(--saffron-primary);">ॐ</div>
+            <h3>{{ SITE_CONFIG.primary_brand }}</h3>
+            <p style="color: var(--saffron-primary); font-weight: 600;">{{ SITE_CONFIG.secondary_title_en }}</p>
+            <div style="margin-top: 1.5rem; padding: 1rem; background: var(--bg-card-alt); border-radius: var(--border-radius-sm);">
+                📞 <strong>Direct Phone:</strong> {{ SITE_CONFIG.display_phone }}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIALS SECTION -->
+<section class="testimonials-section section-padding">
+    <div class="container">
+        <div class="section-header text-center">
+            <div class="section-tag">श्रद्धालु अनुभव</div>
+            <h2 class="section-title heading-sacred">श्रद्धालुओं के अनुभव व समीक्षाएं</h2>
+        </div>
+
+        <div class="testimonials-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            {% for t in testimonials %}
+            <div class="testimonial-card" style="background: var(--bg-card); padding: 1.8rem; border-radius: var(--border-radius-md); border: 1px solid var(--border-color); position: relative;">
+                {% if t.is_sample %}
+                <span style="font-size: 0.75rem; background: #FEF3C7; color: #B45309; padding: 2px 6px; border-radius: 4px; position: absolute; top: 10px; right: 10px;">Sample Content</span>
+                {% endif %}
+                <div style="color: #F59E0B; margin-bottom: 0.5rem;">⭐⭐⭐⭐⭐</div>
+                <p style="font-style: italic; margin-bottom: 1rem;">"{ {{ t.content }} }"</p>
+                <div style="font-weight: 700; color: var(--saffron-primary);">{{ t.name }}</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">{{ t.location }}, {{ t.country }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section id="contact" class="contact-section section-padding bg-alt">
+    <div class="container">
+        <div class="section-header text-center">
+            <div class="section-tag">संपर्क करें</div>
+            <h2 class="section-title heading-sacred">एस्ट्रो आशीष जी से संपर्क करें</h2>
+            <p class="section-subtitle">किसी भी सामान्य पूछताछ या संदेश के लिए नीचे दिया गया फॉर्म भरें</p>
+        </div>
+
+        <div style="max-width: 600px; margin: 0 auto; background: var(--bg-card); padding: 2.5rem; border-radius: var(--border-radius-lg); border: 1px solid var(--border-gold); box-shadow: var(--shadow-soft);">
+            <form action="{{ url_for('contact.submit_contact') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                
+                <div style="margin-bottom: 1.2rem;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.4rem;">आपका नाम (Full Name) *</label>
+                    <input type="text" name="name" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);">
+                </div>
+
+                <div style="margin-bottom: 1.2rem;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.4rem;">फोन / व्हाट्सएप नंबर (Phone / WhatsApp) *</label>
+                    <input type="tel" name="phone" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);">
+                </div>
+
+                <div style="margin-bottom: 1.2rem;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.4rem;">ईमेल (Email Address)</label>
+                    <input type="email" name="email" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);">
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.4rem;">संदेश / प्रश्न (Message) *</label>
+                    <textarea name="message" rows="4" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-saffron" style="width: 100%;">संदेश भेजें (Send Message)</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

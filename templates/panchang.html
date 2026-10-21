@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}आज का दैनिक राशिफल एवं 12 राशि राशिफल | {{ SITE_CONFIG.brand_name }}{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <!-- HEADER & DATE NAVIGATION -->
+        <div class="section-header text-center" style="margin-bottom: 2rem;">
+            <div class="section-tag">पंचांग व राशिफल</div>
+            <h1 class="section-title heading-sacred" style="font-size: 2.2rem; margin-top: 0.5rem;">आज का दैनिक राशिफल एवं 12 राशि दैनिक राशिफल</h1>
+            <p class="section-subtitle">स्थान: {{ panchang.location_name or 'Varanasi, India' }} | समय क्षेत्र: {{ panchang.timezone or 'Asia/Kolkata' }}</p>
+            
+            <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                <a href="{{ url_for('main.panchang_page', date=prev_date) }}" class="btn btn-outline" style="padding: 0.5rem 1.2rem; font-size: 0.9rem;">
+                    ← पिछला दिन ({{ prev_date }})
+                </a>
+                <a href="{{ url_for('main.panchang_page') }}" class="btn {% if is_today %}btn-saffron{% else %}btn-outline{% endif %}" style="padding: 0.5rem 1.2rem; font-size: 0.9rem;">
+                    आज ({{ current_date }})
+                </a>
+                <a href="{{ url_for('main.panchang_page', date=next_date) }}" class="btn btn-outline" style="padding: 0.5rem 1.2rem; font-size: 0.9rem;">
+                    अगला दिन ({{ next_date }}) →
+                </a>
+            </div>
+        </div>
+
+        {% if panchang.is_available == False %}
+        <div style="background: #FEE2E2; border: 1px solid #FCA5A5; color: #991B1B; padding: 1.5rem; border-radius: 8px; text-align: center; margin-bottom: 2rem;">
+            <h3>⚠️ पंचांग विवरण उपलब्ध नहीं है</h3>
+            <p>{{ panchang.error or "चुने गए दिनांक के लिए पंचांग गणना उपलब्ध नहीं हो सकी।" }}</p>
+        </div>
+        {% else %}
+        <!-- DAILY PANCHANG CONTAINER -->
+        <div style="background: var(--bg-card); border: 2px solid var(--border-gold); padding: 2.5rem; border-radius: var(--border-radius-lg); margin-bottom: 3.5rem; box-shadow: var(--shadow-soft);">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <h2 style="color: var(--saffron-primary); margin: 0;" class="heading-sacred">
+                    🪔 दैनिक पंचांग - {{ current_date }} ({{ panchang.day.hi if panchang.day is mapping else panchang.day }})
+                </h2>
+                <span class="badge" style="background: var(--saffron-light); color: var(--saffron-dark); font-weight: 600; padding: 0.4rem 0.8rem; border-radius: 20px;">
+                    {{ panchang.location_name }}
+                </span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem;">
+                <!-- Card 1: Vaar & Tithi -->
+                <div style="padding: 1.2rem; background: var(--bg-card-alt); border-radius: 10px; border-left: 4px solid var(--saffron-primary);">
+                    <h4 style="color: var(--saffron-primary); margin-bottom: 0.5rem;">📅 वार व तिथि</h4>
+                    <p style="margin: 0.2rem 0;"><strong>वार:</strong> {{ panchang.day.hi if panchang.day is mapping else panchang.day }} ({{ panchang.day.en if panchang.day is mapping else panchang.day }})</p>
+                    <p style="margin: 0.2rem 0;"><strong>तिथि:</strong> {{ panchang.tithi.hi }}</p>
+                    <p style="margin: 0.2rem 0; font-size: 0.88rem; color: var(--text-muted);"><strong>पक्ष:</strong> {{ panchang.paksha.hi }} ({{ panchang.paksha.en }})</p>
+                </div>
+
+                <!-- Card 2: Nakshatra, Yoga & Karana -->
+                <div style="padding: 1.2rem; background: var(--bg-card-alt); border-radius: 10px; border-left: 4px solid #D97706;">
+                    <h4 style="color: var(--saffron-primary); margin-bottom: 0.5rem;">⭐ नक्षत्र, योग एवं करण</h4>
+                    <p style="margin: 0.2rem 0;"><strong>नक्षत्र:</strong> {{ panchang.nakshatra.hi }} ({{ panchang.nakshatra.en }})</p>
+                    <p style="margin: 0.2rem 0;"><strong>योग:</strong> {{ panchang.yoga.hi }} ({{ panchang.yoga.en }})</p>
+                    <p style="margin: 0.2rem 0;"><strong>करण:</strong> {{ panchang.karana.hi }} ({{ panchang.karana.en }})</p>
+                </div>
+
+                <!-- Card 3: Sun & Moon Timings -->
+                <div style="padding: 1.2rem; background: var(--bg-card-alt); border-radius: 10px; border-left: 4px solid #059669;">
+                    <h4 style="color: var(--saffron-primary); margin-bottom: 0.5rem;">☀️ सूर्योदय एवं चंद्रोदय</h4>
+                    <p style="margin: 0.2rem 0;"><strong>सूर्योदय:</strong> {{ panchang.sunMoon.sunrise }} | <strong>सूर्यास्त:</strong> {{ panchang.sunMoon.sunset }}</p>
+                    <p style="margin: 0.2rem 0;"><strong>चंद्रोदय:</strong> {{ panchang.sunMoon.moonrise }} | <strong>चंद्रास्त:</strong> {{ panchang.sunMoon.moonset }}</p>
+                    <p style="margin: 0.2rem 0; font-size: 0.88rem; color: var(--text-muted);"><strong>सूर्य राशि:</strong> {{ panchang.sun_rashi.hi }} | <strong>चंद्र राशि:</strong> {{ panchang.moon_rashi.hi }}</p>
+                </div>
+
+                <!-- Card 4: Shubh & Ashubh Muhurat -->
+                <div style="padding: 1.2rem; background: var(--bg-card-alt); border-radius: 10px; border-left: 4px solid #DC2626;">
+                    <h4 style="color: var(--saffron-primary); margin-bottom: 0.5rem;">⏳ मुहूर्त एवं काल</h4>
+                    <p style="margin: 0.2rem 0;"><strong>अभिजीत मुहूर्त:</strong> {{ panchang.abhijitMuhurat }}</p>
+                    <p style="margin: 0.2rem 0;"><strong>ब्रह्म मुहूर्त:</strong> {{ panchang.brahmaMuhurat }}</p>
+                    <p style="margin: 0.2rem 0; color: #DC2626;"><strong>राहुकाल:</strong> {{ panchang.rahuKaal }}</p>
+                    <p style="margin: 0.2rem 0; font-size: 0.88rem;"><strong>यमगण्ड:</strong> {{ panchang.yamaganda }} | <strong>गुलिक काल:</strong> {{ panchang.gulikaKaal }}</p>
+                </div>
+            </div>
+
+            <!-- Choghadiya Section -->
+            {% if panchang.choghadiya %}
+            <div style="margin-top: 2rem; border-top: 1px dashed var(--border-color); padding-top: 1.5rem;">
+                <h4 style="color: var(--saffron-primary); margin-bottom: 1rem;">⏱️ दिन का चौघड़िया (Day Choghadiya)</h4>
+                <div style="display: flex; gap: 0.8rem; overflow-x: auto; padding-bottom: 0.5rem;">
+                    {% for c in panchang.choghadiya %}
+                    <div style="min-width: 140px; padding: 0.8rem; background: var(--bg-card-alt); border-radius: 6px; border: 1px solid var(--border-color); text-align: center;">
+                        <span style="font-weight: bold; font-size: 0.95rem; color: var(--saffron-dark);">{{ c.name_hi }}</span>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">{{ c.time }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 1.5rem; text-align: center; font-style: italic; margin-bottom: 0;">
+                * प्रामाणिक वैदिक खगोलीय गणना पर आधारित पंचांग। व्यक्तिगत विशिष्ट मुहूर्त हेतु पूज्य एस्ट्रो आशीष जी से परामर्श लें।
+            </p>
+        </div>
+        {% endif %}
+
+        <!-- 12 RASHI GRID SECTION -->
+        <div style="margin-top: 3rem;">
+            <div class="text-center" style="margin-bottom: 2rem;">
+                <h2 class="section-title heading-sacred">12 राशि दैनिक राशिफल ({{ current_date }})</h2>
+                <p class="section-subtitle">अपनी राशि चुनें और विस्तृत करियर, व्यवसाय, वित्त, प्रेम एवं स्वास्थ्य राशिफल देखें</p>
+            </div>
+
+            {% if not rashifal_list %}
+            <div style="background: #FEF3C7; border: 1px solid #F59E0B; color: #92400E; padding: 2rem; border-radius: 12px; text-align: center; margin: 2rem 0;">
+                <h3 style="margin-top: 0;">⚠️ आज का राशिफल अभी उपलब्ध नहीं है</h3>
+                <p style="margin-bottom: 0;">आज का राशिफल अभी उपलब्ध नहीं है। कृपया थोड़ी देर बाद पुनः प्रयास करें।</p>
+            </div>
+            {% else %}
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.8rem;">
+                {% for r in rashifal_list %}
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.8rem; border-radius: var(--border-radius-md); box-shadow: var(--shadow-soft); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                            <div style="display: flex; align-items: center; gap: 0.8rem;">
+                                <span style="font-size: 2.2rem; color: var(--saffron-primary);">{{ r.icon }}</span>
+                                <div>
+                                    <h3 style="margin: 0; color: var(--text-main); font-size: 1.3rem;">{{ r.zodiac_name_hi }}</h3>
+                                    <small style="color: var(--text-muted);">{{ r.zodiac_name_en }}</small>
+                                </div>
+                            </div>
+                            <span style="background: var(--saffron-light); color: var(--saffron-dark); font-size: 0.8rem; padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: 600;">
+                                लकी न: {{ r.lucky_number }}
+                            </span>
+                        </div>
+
+                        <p style="color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; margin-bottom: 1.2rem;">
+                            {{ r.summary }}
+                        </p>
+
+                        <!-- Quick Badges -->
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.2rem; font-size: 0.82rem;">
+                            <span style="background: var(--bg-card-alt); padding: 0.3rem 0.6rem; border-radius: 4px;">🎨 शुभ रंग: {{ r.lucky_color }}</span>
+                        </div>
+                    </div>
+
+                    <a href="{{ url_for('main.rashifal_detail', zodiac_name=r.zodiac, date=current_date) }}" class="btn btn-outline" style="text-align: center; width: 100%; border-color: var(--saffron-primary); color: var(--saffron-primary);">
+                        विस्तृत राशिफल देखें (Full Rashifal) →
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

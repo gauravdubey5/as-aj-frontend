@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy Policy | {{ SITE_CONFIG.brand_name }}{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container" style="max-width: 800px; background: var(--bg-card); padding: 2.5rem; border-radius: var(--border-radius-lg); border: 1px solid var(--border-color);">
+        <h2 class="heading-sacred" style="color: var(--saffron-primary); margin-bottom: 1.5rem;">Privacy Policy (गोपनीयता नीति)</h2>
+        
+        <p style="margin-bottom: 1rem;">At <strong>Astro Ashish Ji</strong>, we treat your birth details and personal information with utmost respect and confidentiality.</p>
+
+        <h3 style="color: var(--saffron-primary); margin-top: 1.5rem; margin-bottom: 0.5rem;">1. Information We Collect</h3>
+        <p style="margin-bottom: 1rem;">We collect details provided by you during consultation booking: Name, Gender, Date of Birth, Birth Time, Birth Place, Contact Number, Email, and specific life concerns.</p>
+
+        <h3 style="color: var(--saffron-primary); margin-top: 1.5rem; margin-bottom: 0.5rem;">2. How We Use Your Birth Information</h3>
+        <p style="margin-bottom: 1rem;">Your birth chart and personal data are strictly used for generating astrological charts and conducting confidential consultations with Astro Ashish Ji.</p>
+
+        <h3 style="color: var(--saffron-primary); margin-top: 1.5rem; margin-bottom: 0.5rem;">3. Data Protection & Security</h3>
+        <ul style="padding-left: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8;">
+            <li>We do NOT display sensitive birth information in public URLs.</li>
+            <li>We do NOT sell, rent, or share customer data with any third parties.</li>
+            <li>Database access is restricted exclusively to authorized backend systems.</li>
+        </ul>
+
+        <p style="font-size: 0.9rem; color: var(--text-muted);">For any questions regarding privacy, please contact us at +91 884 042 5538.</p>
+    </div>
+</section>
+{% endblock %}

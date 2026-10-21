@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Management | Astro Ashish Ji Admin</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #F4F6F8; color: #111827; }
+        .admin-header { background: #1F2937; color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .admin-brand { font-size: 1.2rem; font-weight: 700; color: #F59E0B; }
+        .admin-nav { display: flex; gap: 1.5rem; }
+        .admin-nav a { color: #D1D5DB; text-decoration: none; font-size: 0.95rem; font-weight: 500; }
+        .admin-nav a:hover, .admin-nav a.active { color: #FFF; font-weight: 700; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .filter-card { background: #fff; padding: 1.2rem; border-radius: 8px; border: 1px solid #E5E7EB; margin-bottom: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+        .filter-card input, .filter-card select { padding: 0.6rem 0.8rem; border: 1px solid #D1D5DB; border-radius: 6px; }
+        .btn { padding: 0.6rem 1.2rem; background: #B45309; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; text-decoration: none; }
+        .table-card { background: #fff; border-radius: 8px; border: 1px solid #E5E7EB; padding: 1.5rem; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 0.8rem; border-bottom: 1px solid #E5E7EB; font-size: 0.9rem; }
+        th { background: #F9FAFB; color: #374151; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+        .badge-pending { background: #FEF3C7; color: #B45309; }
+        .badge-confirmed { background: #D1FAE5; color: #065F46; }
+        .badge-completed { background: #E0E7FF; color: #3730A3; }
+        .badge-cancelled { background: #FEE2E2; color: #991B1B; }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="admin-brand">Astro Ashish Ji • Booking Management</div>
+        <nav class="admin-nav">
+            <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('admin.bookings') }}" class="active">Bookings</a>
+            <a href="{{ url_for('admin.services') }}">Services</a>
+            <a href="{{ url_for('admin.pooja') }}">Pooja</a>
+            <a href="{{ url_for('admin.testimonials') }}">Testimonials</a>
+            <a href="{{ url_for('admin.contacts') }}">Enquiries</a>
+            <a href="{{ url_for('admin.horoscope') }}">Horoscope</a>
+            <a href="{{ url_for('admin.logout') }}" style="color: #F87171;">Logout</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2 style="margin-bottom: 1rem;">Consultation Bookings</h2>
+
+        <!-- Search & Filter Form -->
+        <form method="GET" action="{{ url_for('admin.bookings') }}" class="filter-card">
+            <input type="text" name="q" value="{{ search_q }}" placeholder="Search by name, ref, or phone..." style="flex: 1; min-width: 200px;">
+            <select name="status">
+                <option value="">All Statuses</option>
+                <option value="pending" {% if current_status == 'pending' %}selected{% endif %}>Pending</option>
+                <option value="confirmed" {% if current_status == 'confirmed' %}selected{% endif %}>Confirmed</option>
+                <option value="completed" {% if current_status == 'completed' %}selected{% endif %}>Completed</option>
+                <option value="cancelled" {% if current_status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+            </select>
+            <button type="submit" class="btn">Filter</button>
+            <a href="{{ url_for('admin.bookings') }}" style="padding: 0.6rem 1rem; color: #4B5563; text-decoration: none;">Reset</a>
+        </form>
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Reference</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>WhatsApp / Phone</th>
+                        <th>DOB & Time</th>
+                        <th>Birth Place</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in bookings %}
+                    <tr>
+                        <td><strong>{{ b.booking_reference }}</strong></td>
+                        <td>{{ b.full_name }}</td>
+                        <td>{{ b.consultation_type }}</td>
+                        <td><a href="https://wa.me/{{ b.whatsapp_number }}" target="_blank" style="color: #059669; text-decoration: underline;">{{ b.whatsapp_number }}</a></td>
+                        <td>{{ b.date_of_birth }} <br><small style="color: #6B7280;">{{ b.birth_time or 'Unknown' }}</small></td>
+                        <td>{{ b.birth_place }}</td>
+                        <td><span class="badge badge-{{ b.status }}">{{ b.status }}</span></td>
+                        <td>
+                            <a href="{{ url_for('admin.booking_detail', booking_id=b.id) }}" style="color: #B45309; font-weight: 600;">View & Edit</a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8">No matching consultation bookings found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

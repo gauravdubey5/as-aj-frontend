@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Enquiries | Admin</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #F4F6F8; color: #111827; }
+        .admin-header { background: #1F2937; color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .admin-brand { font-size: 1.2rem; font-weight: 700; color: #F59E0B; }
+        .admin-nav { display: flex; gap: 1.5rem; }
+        .admin-nav a { color: #D1D5DB; text-decoration: none; font-size: 0.95rem; font-weight: 500; }
+        .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+        .card { background: #fff; padding: 1.5rem; border-radius: 8px; border: 1px solid #E5E7EB; margin-bottom: 1.5rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 0.8rem; border-bottom: 1px solid #E5E7EB; text-align: left; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="admin-brand">Astro Ashish Ji • Contact Enquiries</div>
+        <nav class="admin-nav">
+            <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('admin.bookings') }}">Bookings</a>
+            <a href="{{ url_for('admin.services') }}">Services</a>
+            <a href="{{ url_for('admin.pooja') }}">Pooja</a>
+            <a href="{{ url_for('admin.testimonials') }}">Testimonials</a>
+            <a href="{{ url_for('admin.contacts') }}" style="color:#FFF; font-weight:700;">Enquiries</a>
+            <a href="{{ url_for('admin.horoscope') }}">Horoscope</a>
+            <a href="{{ url_for('admin.logout') }}" style="color: #F87171;">Logout</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2 style="margin-bottom: 1rem;">Website Contact Leads</h2>
+
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Message</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in enquiries %}
+                    <tr>
+                        <td>{{ c.created_at.strftime('%Y-%m-%d %H:%M') if c.created_at else '' }}</td>
+                        <td><strong>{{ c.name }}</strong></td>
+                        <td><a href="https://wa.me/{{ c.phone }}" target="_blank" style="color: #059669;">{{ c.phone }}</a></td>
+                        <td>{{ c.email or 'N/A' }}</td>
+                        <td style="max-width: 350px;">{{ c.message }}</td>
+                        <td><span style="background: #FEF3C7; color: #B45309; padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 0.75rem;">{{ c.status }}</span></td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6">No contact enquiries received yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

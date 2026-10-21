@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Details - {{ booking.booking_reference }} | Admin</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #F4F6F8; color: #111827; }
+        .admin-header { background: #1F2937; color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .admin-brand { font-size: 1.2rem; font-weight: 700; color: #F59E0B; }
+        .admin-nav { display: flex; gap: 1.5rem; }
+        .admin-nav a { color: #D1D5DB; text-decoration: none; font-size: 0.95rem; font-weight: 500; }
+        .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+        .card { background: #fff; padding: 2rem; border-radius: 8px; border: 1px solid #E5E7EB; margin-bottom: 1.5rem; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+        label { display: block; font-weight: 600; font-size: 0.85rem; color: #374151; margin-bottom: 0.3rem; }
+        input, select, textarea { width: 100%; padding: 0.7rem; border-radius: 6px; border: 1px solid #D1D5DB; }
+        .btn { padding: 0.8rem 1.5rem; background: #B45309; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .alert { padding: 0.8rem; border-radius: 6px; margin-bottom: 1rem; background: #D1FAE5; color: #065F46; }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="admin-brand">Astro Ashish Ji • Booking Detail</div>
+        <nav class="admin-nav">
+            <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('admin.bookings') }}">Bookings</a>
+            <a href="{{ url_for('admin.logout') }}" style="color: #F87171;">Logout</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h2>Booking: <span style="color: #B45309;">{{ booking.booking_reference }}</span></h2>
+            <a href="{{ url_for('admin.bookings') }}" style="color: #4B5563; text-decoration: none; font-weight: 600;">← Back to Bookings</a>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-bottom: 1rem; color: #1F2937;">Customer Information</h3>
+            <div class="grid-2">
+                <div>
+                    <label>Full Name</label>
+                    <div style="font-weight: 700;">{{ booking.full_name }}</div>
+                </div>
+                <div>
+                    <label>Gender</label>
+                    <div>{{ booking.gender or 'Not specified' }}</div>
+                </div>
+                <div>
+                    <label>WhatsApp Number</label>
+                    <div><a href="https://wa.me/{{ booking.whatsapp_number }}" target="_blank" style="color: #059669; font-weight: 600;">{{ booking.whatsapp_number }}</a></div>
+                </div>
+                <div>
+                    <label>Email Address</label>
+                    <div>{{ booking.email or 'N/A' }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-bottom: 1rem; color: #1F2937;">Birth Chart Data</h3>
+            <div class="grid-2">
+                <div>
+                    <label>Date of Birth</label>
+                    <div style="font-size: 1.1rem; font-weight: 700; color: #B45309;">{{ booking.date_of_birth }}</div>
+                </div>
+                <div>
+                    <label>Time of Birth</label>
+                    <div style="font-size: 1.1rem; font-weight: 700; color: #B45309;">{{ booking.birth_time or 'Time Unknown' }}</div>
+                </div>
+                <div>
+                    <label>Place of Birth</label>
+                    <div style="font-weight: 600;">{{ booking.birth_place }}</div>
+                </div>
+                <div>
+                    <label>Country</label>
+                    <div>{{ booking.country or 'India' }}</div>
+                </div>
+            </div>
+            <div style="margin-top: 1rem;">
+                <label>Primary Concerns / Notes</label>
+                <div style="background: #F9FAFB; padding: 0.8rem; border-radius: 6px; border: 1px solid #E5E7EB;">{{ booking.concerns or 'General Consultation' }}</div>
+            </div>
+        </div>
+
+        <!-- Management Form -->
+        <form action="{{ url_for('admin.booking_detail', booking_id=booking.id) }}" method="POST" class="card">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <h3 style="margin-bottom: 1rem; color: #1F2937;">Manage Appointment</h3>
+            
+            <div class="grid-2">
+                <div>
+                    <label>Status</label>
+                    <select name="status">
+                        <option value="pending" {% if booking.status == 'pending' %}selected{% endif %}>Pending</option>
+                        <option value="confirmed" {% if booking.status == 'confirmed' %}selected{% endif %}>Confirmed</option>
+                        <option value="completed" {% if booking.status == 'completed' %}selected{% endif %}>Completed</option>
+                        <option value="cancelled" {% if booking.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Appointment Date & Time</label>
+                    <input type="text" name="appointment_date" value="{{ booking.appointment_date or '' }}" placeholder="e.g. 2026-10-05 14:00">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label>Google Meet / Zoom URL</label>
+                <input type="url" name="meeting_url" value="{{ booking.meeting_url or '' }}" placeholder="https://meet.google.com/xyz-abc-def">
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label>Internal Admin Notes</label>
+                <textarea name="notes" rows="3" placeholder="Notes about astrological remedies given, Dasha observations...">{{ booking.notes or '' }}</textarea>
+            </div>
+
+            <button type="submit" class="btn">Update Booking Status</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}404 Page Not Found | {{ SITE_CONFIG.brand_name }}{% endblock %}
+{% block content %}
+<section class="section-padding text-center">
+    <div class="container" style="max-width: 600px;">
+        <div style="font-size: 4rem; color: var(--saffron-primary);">🪔</div>
+        <h1 class="heading-sacred" style="color: var(--saffron-primary); margin-bottom: 1rem;">404 - पृष्ठ नहीं मिला (Page Not Found)</h1>
+        <p style="margin-bottom: 2rem; color: var(--text-muted);">जिस पृष्ठ को आप खोज रहे हैं वह उपलब्ध नहीं है या हटा दिया गया है।</p>
+        <a href="{{ url_for('main.index') }}" class="btn btn-saffron">मुख्य पृष्ठ पर जाएं (Back to Home)</a>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}ऑनलाइन पूजा व अनुष्ठान | {{ SITE_CONFIG.brand_name }}{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <div class="section-header text-center">
+            <div class="section-tag">शास्त्रोक्त अनुष्ठान</div>
+            <h2 class="section-title heading-sacred">ऑनलाइन पूजा एवं वैदिक अनुष्ठान</h2>
+            <p class="section-subtitle">घर बैठे नाम, गोत्र एवं व्यक्तिगत संकल्प के साथ लाइव वैदिक पूजा</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+            {% for pooja in poojas %}
+            <div style="background: var(--bg-card); border: 2px solid var(--border-gold); padding: 2rem; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-soft); display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <h3 style="color: var(--saffron-primary); margin-bottom: 0.5rem;" class="heading-sacred">{{ pooja.name_hi }}</h3>
+                    <h4 style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 1rem;">{{ pooja.name_en }}</h4>
+                    <p style="color: var(--text-main); margin-bottom: 1.5rem; line-height: 1.7;">{{ pooja.description_hi }}</p>
+                    
+                    <div style="background: var(--bg-card-alt); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.9rem;">
+                        <p style="margin-bottom: 0.4rem;">✔ <strong>लाइव वीडियो लिंक:</strong> संकल्प के समय व्हाट्सएप पर मीटिंग लिंक</p>
+                        <p style="margin-bottom: 0.4rem;">✔ <strong>प्रसाद सेवा:</strong> पूजा उपरांत सिद्ध प्रसाद आपके पते पर</p>
+                        <p style="margin: 0;">⏱️ <strong>अवधि:</strong> {{ pooja.duration }}</p>
+                    </div>
+                </div>
+
+                <a href="https://wa.me/{{ SITE_CONFIG.whatsapp_number }}?text={{ ('प्रणाम पंडित जी, मुझे ' + pooja.name_hi + ' पूजा का संकल्प करवाना है।') | urlencode }}" target="_blank" class="btn btn-whatsapp" style="width: 100%; text-align: center;">
+                    💬 व्हाट्सएप पर संकल्प बुक करें
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

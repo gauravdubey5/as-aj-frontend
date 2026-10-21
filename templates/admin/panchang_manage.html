@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panchang Management | Admin Portal</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #F4F6F8; color: #111827; }
+        .admin-header { background: #1F2937; color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .admin-brand { font-size: 1.2rem; font-weight: 700; color: #F59E0B; }
+        .admin-nav { display: flex; gap: 1.2rem; }
+        .admin-nav a { color: #D1D5DB; text-decoration: none; font-size: 0.95rem; font-weight: 500; }
+        .admin-nav a:hover, .admin-nav a.active { color: #FFF; font-weight: 700; }
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+        .card { background: #fff; border-radius: 8px; border: 1px solid #E5E7EB; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .btn { background: #F59E0B; color: #fff; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .btn-green { background: #10B981; }
+        .btn-gray { background: #6B7280; }
+        .alert { padding: 0.8rem; border-radius: 6px; margin-bottom: 1rem; background: #D1FAE5; color: #065F46; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        td, th { padding: 0.8rem; border-bottom: 1px solid #E5E7EB; }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="admin-brand">Astro Ashish Ji • Admin Portal</div>
+        <nav class="admin-nav">
+            <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('admin.panchang_manage') }}" class="active">Panchang</a>
+            <a href="{{ url_for('admin.rashifal_manage') }}">Rashifal</a>
+            <a href="{{ url_for('admin.bookings') }}">Bookings</a>
+            <a href="{{ url_for('admin.logout') }}" style="color: #F87171;">Logout</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <div class="card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <h2>Panchang Management</h2>
+                <p style="color: #6B7280; margin-top: 0.3rem;">Selected Date: <strong>{{ date_str }}</strong></p>
+            </div>
+            <form method="GET" action="{{ url_for('admin.panchang_manage') }}" style="display: flex; gap: 0.5rem; align-items: center;">
+                <input type="date" name="date" value="{{ date_str }}" style="padding: 0.5rem; border: 1px solid #D1D5DB; border-radius: 6px;">
+                <button type="submit" class="btn">Select Date</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3>Panchang Metrics ({{ date_str }})</h3>
+                <div style="display: flex; gap: 0.8rem;">
+                    <form method="POST" action="{{ url_for('admin.panchang_manage', date=date_str) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="action" value="refresh">
+                        <input type="hidden" name="date" value="{{ date_str }}">
+                        <button type="submit" class="btn btn-green">🔄 Refresh Astronomical Engine</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('admin.panchang_manage', date=date_str) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="action" value="toggle_publish">
+                        <input type="hidden" name="date" value="{{ date_str }}">
+                        <button type="submit" class="btn btn-gray">
+                            {% if record and record.is_published %}Unpublish{% else %}Publish{% endif %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <table>
+                <tr>
+                    <td style="font-weight: 600; width: 30%;">Status / Provider</td>
+                    <td>
+                        <span style="color: #059669; font-weight: 700;">{{ panchang.provider_info or 'Astronomical Engine' }}</span>
+                        ({{ 'Published' if (record and record.is_published) else 'Unpublished / Draft' }})
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: 600;">Location & Timezone</td>
+                    <td>{{ panchang.location_name }} ({{ panchang.timezone }})</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: 600;">Day / Vaar</td>
+                    <td>{{ panchang.day.hi if panchang.day is mapping else panchang.day }}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: 600;">Tithi</td>
+                    <td>{{ panchang.tithi.hi }}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: 600;">Paksha</td>
+                    <td>{{ panchang.paksha.hi }} ({{ panchang.paksha.en }})</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: 600;">Nakshatra</td>
+                    <td>{{ panchang.nakshatra.hi }} ({{ panchang.nakshatra.en }})</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: 600;">Yoga & Karana</td>
+                    <td>{{ panchang.yoga.hi }} | {{ panchang.karana.hi }}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: 600;">Sunrise & Sunset</td>
+                    <td>Sunrise: {{ panchang.sunMoon.sunrise }} | Sunset: {{ panchang.sunMoon.sunset }}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: 600;">Moonrise & Moonset</td>
+                    <td>Moonrise: {{ panchang.sunMoon.moonrise }} | Moonset: {{ panchang.sunMoon.moonset }}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: 600;">Sun Rashi & Moon Rashi</td>
+                    <td>Sun Rashi: {{ panchang.sun_rashi.hi }} | Moon Rashi: {{ panchang.moon_rashi.hi }}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: 600;">Rahukaal</td>
+                    <td>{{ panchang.rahuKaal }}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: 600;">Abhijit Muhurat</td>
+                    <td>{{ panchang.abhijitMuhurat }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

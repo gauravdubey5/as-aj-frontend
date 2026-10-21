@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12 Rashi Daily Rashifal Management | Admin Portal</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #F4F6F8; color: #111827; }
+        .admin-header { background: #1F2937; color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .admin-brand { font-size: 1.2rem; font-weight: 700; color: #F59E0B; }
+        .admin-nav { display: flex; gap: 1.2rem; }
+        .admin-nav a { color: #D1D5DB; text-decoration: none; font-size: 0.95rem; font-weight: 500; }
+        .admin-nav a:hover, .admin-nav a.active { color: #FFF; font-weight: 700; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .card { background: #fff; border-radius: 8px; border: 1px solid #E5E7EB; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .btn { background: #F59E0B; color: #fff; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn-green { background: #10B981; }
+        .btn-blue { background: #2563EB; }
+        .alert { padding: 0.8rem; border-radius: 6px; margin-bottom: 1rem; background: #D1FAE5; color: #065F46; }
+        .rashi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; }
+        .form-group { margin-bottom: 0.8rem; }
+        .form-group label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 0.2rem; color: #374151; }
+        .form-group input, .form-group textarea { width: 100%; padding: 0.5rem; border: 1px solid #D1D5DB; border-radius: 6px; font-size: 0.88rem; }
+        .form-group textarea { height: 60px; }
+        .history-chip { display: inline-block; padding: 0.3rem 0.8rem; background: #E5E7EB; border-radius: 16px; color: #374151; text-decoration: none; font-size: 0.85rem; font-weight: 600; margin-right: 0.4rem; margin-bottom: 0.4rem; }
+        .history-chip.active { background: #F59E0B; color: #fff; }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="admin-brand">Astro Ashish Ji • Admin Portal</div>
+        <nav class="admin-nav">
+            <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('admin.panchang_manage') }}">Panchang</a>
+            <a href="{{ url_for('admin.rashifal_manage') }}" class="active">Rashifal</a>
+            <a href="{{ url_for('admin.bookings') }}">Bookings</a>
+            <a href="{{ url_for('admin.logout') }}" style="color: #F87171;">Logout</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <!-- HEADER CARD -->
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <h2>12 Rashi Daily Rashifal Management</h2>
+                    <p style="color: #6B7280; margin-top: 0.3rem;">Viewing Date: <strong>{{ date_str }}</strong> (Asia/Kolkata)</p>
+                </div>
+                <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: center;">
+                    <form method="GET" action="{{ url_for('admin.rashifal_manage') }}" style="display: flex; gap: 0.5rem; align-items: center;">
+                        <input type="date" name="date" value="{{ date_str }}" style="padding: 0.5rem; border: 1px solid #D1D5DB; border-radius: 6px;">
+                        <button type="submit" class="btn">Select Date</button>
+                    </form>
+
+                    <form method="POST" action="{{ url_for('admin.rashifal_manage', date=date_str) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="action" value="generate_all">
+                        <input type="hidden" name="date" value="{{ date_str }}">
+                        <button type="submit" class="btn btn-green">⚡ Auto-Generate 12 Rashis</button>
+                    </form>
+
+                    <form method="POST" action="{{ url_for('admin.rashifal_manage', date=date_str) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="action" value="regenerate_today">
+                        <input type="hidden" name="date" value="{{ date_str }}">
+                        <button type="submit" class="btn btn-blue">🔄 Regenerate Date</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- HISTORICAL DATE CHIPS -->
+            <div style="border-top: 1px dashed #E5E7EB; padding-top: 1rem; margin-top: 1rem;">
+                <span style="font-size: 0.85rem; font-weight: 600; color: #6B7280; margin-right: 0.5rem;">📜 Historical Dates:</span>
+                {% for d in historical_dates %}
+                    <a href="{{ url_for('admin.rashifal_manage', date=d) }}" class="history-chip {% if d == date_str %}active{% endif %}">
+                        {{ d }}
+                    </a>
+                {% else %}
+                    <span style="font-size: 0.85rem; color: #9CA3AF;">No historical dates yet.</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- 12 RASHI EDITORS -->
+        <div class="rashi-grid">
+            {% for z in zodiac_mapping %}
+                {% set slug = z.slug %}
+                {% set h = horoscopes.get(slug) %}
+                <div class="card">
+                    <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #E5E7EB; padding-bottom: 0.8rem; margin-bottom: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="font-size: 1.8rem; color: #F59E0B;">{{ z.icon }}</span>
+                            <div>
+                                <h3 style="margin: 0; color: #111827;">{{ z.hi }} ({{ z.en }})</h3>
+                                <small style="color: #6B7280;">Slug: {{ slug }}</small>
+                            </div>
+                        </div>
+                        <span style="font-size: 0.78rem; background: #F3F4F6; padding: 2px 8px; border-radius: 12px; font-weight: 600;">
+                            {% if h and h.is_published %}Published{% else %}Draft{% endif %}
+                        </span>
+                    </div>
+
+                    <form method="POST" action="{{ url_for('admin.rashifal_manage', date=date_str) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="action" value="edit_single">
+                        <input type="hidden" name="zodiac" value="{{ slug }}">
+                        <input type="hidden" name="date" value="{{ date_str }}">
+
+                        <div class="form-group">
+                            <label>Hindi Summary (मुख्य राशिफल)</label>
+                            <textarea name="content_hi" required>{{ h.content_hi if h else '' }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>English Summary</label>
+                            <textarea name="content_en" required>{{ h.content_en if h else '' }}</textarea>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                            <div class="form-group">
+                                <label>Career (करियर)</label>
+                                <input type="text" name="career_hi" value="{{ h.career_hi if h else '' }}">
+                            </div>
+                            <div class="form-group">
+                                <label>Business (व्यवसाय)</label>
+                                <input type="text" name="business_hi" value="{{ h.business_hi if h else '' }}">
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                            <div class="form-group">
+                                <label>Finance (वित्त)</label>
+                                <input type="text" name="finance_hi" value="{{ h.finance_hi if h else '' }}">
+                            </div>
+                            <div class="form-group">
+                                <label>Love (प्रेम)</label>
+                                <input type="text" name="love_hi" value="{{ h.love_hi if h else '' }}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Advice / Remedy (उपाय)</label>
+                            <input type="text" name="advice_hi" value="{{ h.advice_hi if h else '' }}">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                            <div class="form-group">
+                                <label>Lucky Number</label>
+                                <input type="text" name="lucky_number" value="{{ h.lucky_number if h else '7' }}">
+                            </div>
+                            <div class="form-group">
+                                <label>Lucky Color</label>
+                                <input type="text" name="lucky_color_hi" value="{{ h.lucky_color_hi if h else 'पीला' }}">
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                            <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600;">
+                                <input type="checkbox" name="is_published" {% if not h or h.is_published %}checked{% endif %}> Published
+                            </label>
+                            <button type="submit" class="btn" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Save {{ z.hi }}</button>
+                        </div>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

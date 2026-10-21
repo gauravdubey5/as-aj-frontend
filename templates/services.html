@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}वैदिक सेवाएं | {{ SITE_CONFIG.brand_name }}{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <div class="section-header text-center">
+            <div class="section-tag">प्रामाणिक परामर्श</div>
+            <h2 class="section-title heading-sacred">एस्ट्रो आशीष जी की प्रमुख वैदिक सेवाएं</h2>
+            <p class="section-subtitle">आपकी जन्म कुंडली का सूक्ष्म विश्लेषण एवं शास्त्रोक्त समाधान</p>
+        </div>
+
+        <div class="services-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+            {% for service in services %}
+            <div class="service-card" style="background: var(--bg-card); border: 1px solid var(--border-gold); padding: 2rem; border-radius: var(--border-radius-md); box-shadow: var(--shadow-soft);">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🪔</div>
+                <h3 style="color: var(--saffron-primary); margin-bottom: 0.8rem;">{{ service.name_hi }}</h3>
+                <h4 style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 1rem;">{{ service.name_en }}</h4>
+                <p style="color: var(--text-main); margin-bottom: 1.5rem; line-height: 1.7;">{{ service.description_hi }}</p>
+                <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                    <span style="font-weight: 600; color: var(--saffron-primary);">⏱️ {{ service.duration }}</span>
+                    {% if service.price and service.price > 0 %}
+                    <span style="font-weight: 700; color: var(--text-main); font-size: 1.1rem;">₹{{ service.price | int }}</span>
+                    {% endif %}
+                </div>
+                <a href="{{ url_for('main.consultation_page') }}" class="btn btn-saffron" style="width: 100%;">यह परामर्श बुक करें</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
